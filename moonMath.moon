@@ -54,9 +54,33 @@ removeDuplicateTriplets = (t) ->
             table.remove t, i
   t
 
+--- Adds a point to a table.
+-- @tparam table t
+-- @tparam number x
+-- @tparam number y
+-- @treturn table t
+addPoint = (t, x, y) ->
+  t[#t + 1] = x
+  t[#t + 1] = y
 
+
+--- Remove duplicates from a flat table.
+-- @tparam table t
+-- @treturn table newt
+removeDuplicatePointsFlat = (t) ->
+  print 'Before loop'
+  for i = #t, 1 -2
+    print 'here'
+    for ii = #t - 2, 3, -2
+      if i ~= ii
+        x1, y1 = t[i], t[i + 1]
+        x2, y2 = t[ii], t[ii + 1]
+        if checkFuzzy(x1, x2) and checkFuzzy(y1, y2)
+          table.remove t, ii
+          table.remove t, ii + 1
+  t
 
 {
   :checkFuzzy
-  :removeDuplicate3Points
+  :removeDuplicatePointsFlat
 }
