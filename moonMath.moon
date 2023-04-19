@@ -35,7 +35,7 @@ removeDuplicatePairs = (t) ->
 --- Remove multiple occurrences of triplets.
 -- @tparam table t
 -- @treturn table newt
-removeDuplicate3Points = (t) ->
+removeDuplicateTriplets = (t) ->
   for i = #t, 1, -1
     first = t[i]
     for j = #t, 1, -1
