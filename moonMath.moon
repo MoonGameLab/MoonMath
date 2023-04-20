@@ -67,10 +67,9 @@ addPoint = (t, x, y) ->
 --- Remove duplicates from a flat table.
 -- @tparam table t
 -- @treturn table newt
+-- TODO - Potential Bug 
 removeDuplicatePointsFlat = (t) ->
-  print 'Before loop'
-  for i = #t, 1 -2
-    print 'here'
+  for i = #t, 1, -2
     for ii = #t - 2, 3, -2
       if i ~= ii
         x1, y1 = t[i], t[i + 1]
@@ -80,7 +79,49 @@ removeDuplicatePointsFlat = (t) ->
           table.remove t, ii + 1
   t
 
+
+--- checks if a number is valid
+-- @tparam number n
+-- @treturn bool validity
+validateNumber = (n) ->
+  math = math
+  if type(n) ~= 'number' then return false
+  elseif n ~= n then return false
+  elseif math.abs(n) == math.huge then return false
+  else return true
+
+-- TODO 
+cycle = (t, i) -> t[(i - 1) % #t + 1]
+
+--- Gets the greatest/least points with an offset
+-- @tparam table points
+-- @tparam number offset
+-- @treturn table {greatest, least}
+getGreatestPoint = (points, offset = 1) ->
+  start = 2 - offset
+  greatest = points[start]
+  least = points[start]
+  print greatest, least
+  for i = 2, #points / 2
+    print i, i * 2 - offset
+    i = i * 2 - offset
+    if points[i] > greatest then greatest = points[i]
+    if points[i] < least then least = points[i]
+  greatest, least
+
+
+isWithinBounds = (min, n, max) ->
+  n >= min and n <= max
+
+distance2 = (x1, y1, x2, y2) ->
+  dx, dy = x1 - x2, y1 - y2
+  dx * dx + dy * dy
+
+rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
+
+
+
 {
-  :checkFuzzy
-  :removeDuplicatePointsFlat
+  :getGreatestPoint
+  :cycle
 }
