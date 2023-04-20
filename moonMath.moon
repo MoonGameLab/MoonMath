@@ -117,11 +117,23 @@ distance2 = (x1, y1, x2, y2) ->
   dx, dy = x1 - x2, y1 - y2
   dx * dx + dy * dy
 
+
+--- Rotate a point
+-- @tparam number x
+-- @tparam number y
+-- @tparam number rot
+-- @tparam number ox
+-- @tparam number oy
+-- @treturn table {x, y}
 rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
+  math = math
+  (x - ox) * math.cos(rot) + ox - (y - oy) * math.sin(rot), (x - ox) * math.sin(rot) + (y - oy) * math.cos(rot) + oy
 
 
+scalePoint = (x, y, scale, ox = 0, oy = 0) ->
+  (x - ox) * scale + ox, (y - oy) * scale + oy
 
 {
-  :getGreatestPoint
+  :scalePoint
   :cycle
 }
