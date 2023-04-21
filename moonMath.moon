@@ -117,6 +117,7 @@ distance2 = (x1, y1, x2, y2) ->
   dx, dy = x1 - x2, y1 - y2
   dx * dx + dy * dy
 
+--- Points
 
 --- Rotate a point
 -- @tparam number x
@@ -150,6 +151,49 @@ cartesianToPolar = (x, y, ox, oy) ->
   theta = theta > 0 and theta or theta + 2 * math.pi
   radius = math.sqrt(x ^ 2 + y ^ 2)
   radius, theta
+
+--- Lines
+
+getLength = (x1, y1, x2, y2) ->
+  math = math
+  dx, dy = x1 - x2, y1 - y2
+  math.sqrt dx * dx + dy * dy
+
+getMidPoint = (x1, y1, x2, y2) ->
+  (x1 + x2) / 2, (y1 + y2) / 2
+
+getSlope = (x1, y1, x2, y2) ->
+  if checkFuzzy(x1, x2) then return false
+  (y1 - y2) / (x1 - x2)
+
+getPerpendicularSlope = (...) ->
+  inpt = checkInput ...
+  local slope
+
+  if #inpt ~= 1
+    slope = getSlope unpack(inpt)
+  else
+    slope = unpack(inpt)
+
+  if slope == false then return 0
+  elseif checkFuzzy(slope, 0) then return false
+  else return -1 / slope
+  
+getYIntercept = (x, y, ...) ->
+  inpt = checkInput ...
+  local slope
+
+  if #inpt ~= 1
+    slope = inpt[1]
+  else
+    slope = getSlope x, y, unpack(inpt)*
+
+  if slope == false then return x, true
+  y - slope * x, false
+
+
+
+
 
 
 {
