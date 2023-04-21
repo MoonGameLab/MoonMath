@@ -133,6 +133,25 @@ rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
 scalePoint = (x, y, scale, ox = 0, oy = 0) ->
   (x - ox) * scale + ox, (y - oy) * scale + oy
 
+polarToCartesian = (radius, theta, offsetRadius, offsetTheta) ->
+  math = math
+  ox, oy = 0, 0
+  if offsetRadius and offsetTheta
+    ox, oy = polarToCartesian offsetRadius, offsetTheta
+  
+  x = radius * math.cos(theta)
+  y = radius * math.sin(theta)
+  x + ox, y + oy
+
+cartesianToPolar = (x, y, ox, oy) ->
+  math = math
+  x, y = x - (ox or 0), y - (oy or 0)
+  theta = math.atan2(y, x)
+  theta = theta > 0 and theta or theta + 2 * math.pi
+  radius = math.sqrt(x ^ 2 + y ^ 2)
+  radius, theta
+
+
 {
   :scalePoint
   :cycle
