@@ -109,10 +109,20 @@ getGreatestPoint = (points, offset = 1) ->
     if points[i] < least then least = points[i]
   greatest, least
 
-
+--- Checks if a number is within given bounds
+-- @tparam number min
+-- @tparam number n
+-- @tparam number max
+-- @treturn bool
 isWithinBounds = (min, n, max) ->
   n >= min and n <= max
 
+--- calculates the distance between two points
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn number
 distance2 = (x1, y1, x2, y2) ->
   dx, dy = x1 - x2, y1 - y2
   dx * dx + dy * dy
@@ -130,10 +140,22 @@ rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
   math = math
   (x - ox) * math.cos(rot) + ox - (y - oy) * math.sin(rot), (x - ox) * math.sin(rot) + (y - oy) * math.cos(rot) + oy
 
-
+--- scales a point
+-- @tparam number x
+-- @tparam number y
+-- @tparam number scale
+-- @tparam number ox
+-- @tparam number oy
+-- @treturn table {x, y}
 scalePoint = (x, y, scale, ox = 0, oy = 0) ->
   (x - ox) * scale + ox, (y - oy) * scale + oy
 
+--- From polar to cartesian
+-- @tparam number radius
+-- @tparam number theta
+-- @tparam number offsetRadius
+-- @tparam number offsetTheta
+-- @treturn table {x, y}  
 polarToCartesian = (radius, theta, offsetRadius, offsetTheta) ->
   math = math
   ox, oy = 0, 0
@@ -144,6 +166,12 @@ polarToCartesian = (radius, theta, offsetRadius, offsetTheta) ->
   y = radius * math.sin(theta)
   x + ox, y + oy
 
+--- From cartesian to polar
+-- @tparam number x
+-- @tparam number y
+-- @tparam number ox
+-- @tparam number oy
+-- @treturn table {radius, theta}  
 cartesianToPolar = (x, y, ox, oy) ->
   math = math
   x, y = x - (ox or 0), y - (oy or 0)
@@ -154,18 +182,41 @@ cartesianToPolar = (x, y, ox, oy) ->
 
 --- Lines
 
+--- Gets the leght of a line
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn number
 getLength = (x1, y1, x2, y2) ->
   math = math
   dx, dy = x1 - x2, y1 - y2
   math.sqrt dx * dx + dy * dy
 
+
+--- gets the midpoint of a line
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn number
 getMidPoint = (x1, y1, x2, y2) ->
   (x1 + x2) / 2, (y1 + y2) / 2
 
+
+--- gets the slope of a line
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn number
 getSlope = (x1, y1, x2, y2) ->
   if checkFuzzy(x1, x2) then return false
   (y1 - y2) / (x1 - x2)
 
+--- gives the perpendicular slope of a line  
+-- @tparam table input {x1, y1, x2, y2} or slope
+-- @treturn slope
 getPerpendicularSlope = (...) ->
   inpt = checkInput ...
   local slope
@@ -179,6 +230,11 @@ getPerpendicularSlope = (...) ->
   elseif checkFuzzy(slope, 0) then return false
   else return -1 / slope
   
+--- gets the y-intercept of a line 
+-- @tparam number x
+-- @tparam number y
+-- @tparam table ... {x2, y2} or slope
+-- @treturn table {number, bool}
 getYIntercept = (x, y, ...) ->
   inpt = checkInput ...
   local slope
@@ -191,7 +247,9 @@ getYIntercept = (x, y, ...) ->
   if slope == false then return x, true
   y - slope * x, false
 
-
+--- gets the intersection of two lines
+-- @tparam table ... {slope1, slope2, x1, y1, x2, y2} or {slope1, intercept1, slope2, intercept2} or {x1, y1, x2, y2, x3, y3, x4, y4} 
+-- @treturn table {x, y}
 getLineLineIntersection = (...) ->
   inpt = checkInput ...
   local x, y, x1, y1, x2, y2, x3, y3, x4, y4
@@ -248,6 +306,10 @@ getLineLineIntersection = (...) ->
     
   x, y
 
+
+--- gets the closest point on a line to a point
+-- @tparam table ... {perpendicularX, perpendicularY, x1, y1, x2, y2} or {perpendicularX, perpendicularY, slope, intercept}
+-- @treturn table {x, y}
 getClosestPoint = (perpendicularX, perpendicularY, ...) ->
   inpt = checkInput ...
   local x, y, x1, y1, x2, y2, slope, intercept
@@ -272,6 +334,9 @@ getClosestPoint = (perpendicularX, perpendicularY, ...) ->
   x, y
 
 
+--- gets the intersection of a line and a line segment
+-- @tparam table ... {x1, y1, x2, y2, x3, y3, x4, y4} or {x1, y1, x2, y2, slope, intercept}
+-- @treturn table {x, y}
 getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
   inpt = checkInput ...
 
@@ -314,7 +379,14 @@ getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
 
   if length1 <= distance and length2 <= distance then return x, y else return false
 
-
+--- checks if a point is on a line
+-- @tparam number x
+-- @tparam number y
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn bool  
 checkLinePoint = (x, y, x1, y1, x2, y2) ->
   m = getSlope x1, y1, x2, y2
   b = getYIntercept x1, y1, m
