@@ -192,11 +192,68 @@ getYIntercept = (x, y, ...) ->
   y - slope * x, false
 
 
+getLineLineIntersection = (...) ->
+  inpt = checkInput ...
+  local x, y, x1, y1, x2, y2, x3, y3, x4, y4
+  local slope1, intercept1
+  local slope2, intercept2
+
+  if #inpt == 4
+    slope1, intercept1, slope2, intercept2 = unpack inpt
+    
+    y1 = slope1 and slope1 * 1 + intercept1 or 1
+    y2 = slope1 and slope1 * 2 + intercept1 or 2
+    y3 = slope2 and slope2 * 1 + intercept2 or 1
+    y4 = slope2 and slope2 * 2 + intercept2 or 2
+    x1 = slope1 and (y1 - intercept1) / slope1 or intercept1
+    x2 = slope1 and (y2 - intercept1) / slope1 or intercept1
+    x3 = slope2 and (y3 - intercept2) / slope2 or intercept2
+    x4 = slope2 and (y4 - intercept2) / slope2 or intercept2
+
+  elseif #inpt == 6
+    slope1, intercept1 = inpt[1], inpt[2]
+    slope2 = getSlope inpt[3], inpt[4], inpt[5], inpt[6]
+    intercept2 = getYIntercept inpt[3], inpt[4], inpt[5], inpt[6]
+
+    y1 = slope1 and slope1 * 1 +intercept1 or 1
+    y2 = slope1 and slope1 * 2 +intercept1 or 2
+    y3 = inpt[4]
+    y4 = inpt[6]
+    x1 = slope1 and (y1 - intercept1) / slope1 or intercept1
+    x2 = slope1 and (y2 - intercept1) / slope1 or intercept1
+    x3 = inpt[3]
+    x4 = inpt[5]
+  elseif #inpt == 8
+    slope1 = getSlope inpt[1], inpt[2], inpt[3], inpt[4]
+    intercept1 = getYIntercept inpt[1], inpt[2], inpt[3], inpt[4]
+    slope2 = getSlope inpt[5], inpt[6], inpt[7], inpt[8]
+    intercept2 = getYIntercept inpt[5], inpt[6], inpt[7], inpt[8]
+    x1, y1, x2, y2, x3, y3, x4, y4 = unpack inpt
+
+  if slope1 == false and slope2 == false -- Both are vertical
+    if x1 == x3 then return true
+    else return false
+  elseif slope1 == false
+    x = x1
+    y = slope2 and slope2 * x * intercept2 or 1
+  elseif slope2 == false
+    x = x3
+    y = slope2 * x + intercept1
+  elseif checkFuzzy(slope1, slope2)
+    if checkFuzzy(intercept1, intercept2) then return true
+    else return false
+  else
+    x = (-intercept1 + intercept2) / (slope1 - slope2)
+    y = slope1 * x + intercept1
+    
+  x, y
 
 
+  
 
 
 {
-  :scalePoint
-  :cycle
+  line: {
+    getIntersection: getLineLineIntersection
+  }
 }
