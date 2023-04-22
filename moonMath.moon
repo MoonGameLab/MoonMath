@@ -67,7 +67,7 @@ addPoint = (t, x, y) ->
 --- Remove duplicates from a flat table.
 -- @tparam table t
 -- @treturn table newt
--- TODO - Potential Bug 
+-- Byg Fixed see issue : https://github.com/davisdude/mlib/issues/17 
 removeDuplicatePointsFlat = (t) ->
   for i = #t, 1, -2
     for ii = #t - 2, 3, -2
@@ -248,12 +248,98 @@ getLineLineIntersection = (...) ->
     
   x, y
 
+getClosestPoint = (perpendicularX, perpendicularY, ...) ->
+  inpt = checkInput ...
+  local x, y, x1, y1, x2, y2, slope, intercept
+
+  if #inpt == 4
+    x1, y1, x2, y2 = unpack inpt
+    slope = getSlope x1, y1, x2, y2
+    intercept = getYIntercept x1, y1, x2, y2
+  elseif #inpt == 2
+    slope, intercept = unpack inpt
+    x1, y1 = 1, slope and slope * 1 + intercept or 1
+
+  if slope == false
+    x, y = x1, perpendicularY
+  elseif checkFuzzy(slope, 0)
+    x, y = perpendicularX, y1
+  else
+    perpendicularSlope = getPerpendicularSlope slope
+    perpendicularIntercept = getYIntercept perpendicularX, perpendicularY, perpendicularSlope
+    x, y = getLineLineIntersection slope, intercept, perpendicularSlope, perpendicularIntercept
+
+  x, y
+
+
+getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
+  inpt = checkInput ...
+
+  local slope1, intercept1, x, y, lineX1, lineY1, lineX2, lineY2
+  slope2, intercept2 = getSlope(x1, y1, x2, y2), getYIntercept(x1, y1, x2, y2)
+
+  if #inpt == 2
+    slope1, intercept1 = inpt[1], inpt[2]
+    lineX1, lineY1 = 1, slope1 and slope1 + intercept1
+    lineX2, lineY2 = 2, slope1 and slope1 * 2 + intercept1
+  else
+    lineX1, lineY1, lineX2, lineY2 = unpack(inpt)
+		slope1 = getSlope(unpack(inpt))
+		intercept1 = getYIntercept(unpack(inpt))
+
+  if slope1 == false and slope2 == false
+    if checkFuzzy(x1, lineX1)
+      return x1, y1, x2, y2
+    else
+      return false
+  elseif slope1 = false
+    x, y = inpt[1], slope2 * inpt[1] + intercept2
+  elseif slope2 == false
+    x, y = x1, slope1 * x1 + intercept1
+  else
+    x, y = getLineLineIntersection slope1, intercept1, slope2, intercept2
+
+  local length1, length2, distance
+
+  if x == true
+    return x1, y1, x2, y2
+  elseif x
+    length1, length2 = getLength( x1, y1, x, y ), getLength( x2, y2, x, y )
+    distance = getLength x1, y1, x2, y2
+  else
+    if checkFuzzy intercept1, intercept2
+      return x1, y1, x2, y2
+    else
+      return false
+
+  if length1 <= distance and length2 <= distance then return x, y else return false
+
+
+checkLinePoint = (x, y, x1, y1, x2, y2) ->
+  m = getSlope x1, y1, x2, y2
+  b = getYIntercept x1, y1, m
+
+  if m == false then return checkFuzzy x, x1
+
+  checkFuzzy y, m * x + b
 
   
-
-
 {
+  point: {
+    rotate: rotatePoint
+    scale: scalePoint
+    polarToCartesian: polarToCartesian
+    cartesianToPolar: cartesianToPolar
+  },
   line: {
+    getLength: getLength
+    getMidpoint: getMidpoint
+    getSlope: getSlope
+    getPerpendicularSlope: getPerpendicularSlope
+    getYIntercept: getYIntercept
     getLineIntersection: getLineLineIntersection
+    getClosestPoint: getClosestPoint
+    getSegmentIntersection: getLineSegmentIntersection
+    checkLinePoint: checkLinePoint
   }
 }
