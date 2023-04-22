@@ -1,6 +1,6 @@
 type = type
 table = table
-unpack = table.unpack
+unpack = table.unpack or unpack
 
 
 -- @local
@@ -183,10 +183,10 @@ getYIntercept = (x, y, ...) ->
   inpt = checkInput ...
   local slope
 
-  if #inpt ~= 1
+  if #inpt == 1
     slope = inpt[1]
   else
-    slope = getSlope x, y, unpack(inpt)*
+    slope = getSlope(x, y, unpack(inpt))
 
   if slope == false then return x, true
   y - slope * x, false
@@ -235,7 +235,7 @@ getLineLineIntersection = (...) ->
     else return false
   elseif slope1 == false
     x = x1
-    y = slope2 and slope2 * x * intercept2 or 1
+    y = slope2 and slope2 * x + intercept2 or 1
   elseif slope2 == false
     x = x3
     y = slope2 * x + intercept1
@@ -254,6 +254,6 @@ getLineLineIntersection = (...) ->
 
 {
   line: {
-    getIntersection: getLineLineIntersection
+    getLineIntersection: getLineLineIntersection
   }
 }
