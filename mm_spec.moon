@@ -47,7 +47,20 @@ assert\register "assertion", "tablesFuzzyEqual",tablesFuzzyEqual
 assert\register "assertion", "multipleFUzzyEqual",multipleFUzzyEqual
 
 
+--- Point
+describe "Point", ->
+  point = mm.point
+
+  it "Rotates a point.", ->
+    assert.multipleFUzzyEqual point.rotate(3, 6, math.pi), {-3, -6}
+    assert.multipleFUzzyEqual point.rotate(3, 6, 2 * math.pi), {3, 6}
+    assert.multipleFUzzyEqual point.rotate(2, 2, -math.pi / 6), {02.7320508075600003, .7320508075600001}
+
+
+
+
+
+
 describe "getLineIntersection", ->
   it "test1", ->
-    print mm.line.getLineIntersection( 1, 0, 1, 0, 0, 1 )
     assert.multipleFUzzyEqual mm.line.getLineIntersection( 1, 0, 1, 0, 0, 1 ), { .5, .5 }

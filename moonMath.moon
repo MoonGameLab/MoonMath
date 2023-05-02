@@ -349,8 +349,8 @@ getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
     lineX2, lineY2 = 2, slope1 and slope1 * 2 + intercept1
   else
     lineX1, lineY1, lineX2, lineY2 = unpack(inpt)
-		slope1 = getSlope(unpack(inpt))
-		intercept1 = getYIntercept(unpack(inpt))
+    slope1 = getSlope(unpack(inpt))
+    intercept1 = getYIntercept(unpack(inpt))
 
   if slope1 == false and slope2 == false
     if checkFuzzy(x1, lineX1)
@@ -394,6 +394,105 @@ checkLinePoint = (x, y, x1, y1, x2, y2) ->
   if m == false then return checkFuzzy x, x1
 
   checkFuzzy y, m * x + b
+
+
+--- gets the perpendicular bisector of a line (https://www.youtube.com/watch?v=A86COO8KC58)
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn midx, midy, perpendicularSlope
+getPerpendicularBisector = (x1, y1, x2, y2) ->
+  slope = getSlope x1, y1, x2, y2
+  midx, midy = getMidPoint x1, y1, x2, y2
+  midx, midy, getPerpendicularSlope(slope)
+
+
+--- checks hether or not a point lies on a line segment
+-- @tparam number px
+-- @tparam number py
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn bool
+checkSegmentPoint = ( px, py, x1, y1, x2, y2 ) ->
+  x = checkLinePoint px, py, x1, y1, x2, y2
+  if x == false then return false
+
+  lenghtX = x2 - x1
+  lenghtY = y2 - y1
+
+  if checkFuzzy(lenghtX ,0)
+    if checkFuzzy(px ,x1)
+      local low, high
+      if y1 > y2
+        low = y2
+        high = y1
+      else
+        low = y1
+        high = y2
+      
+      if py >= low and py <= high then return true
+      else return false
+    else
+      return false
+  elseif checkFuzzy(lenghtY, 0)
+    if checkFuzzy(py, y1)
+      local low, high
+      if x1 > x2
+        low = x2
+        high = x1
+      else
+        low = x1
+        high = x2
+
+      if px >= low and px <= high then return true
+      else return false
+    else
+      return false
+
+
+  distToPx = px - x1
+  distToPy = py - y1
+  scaleX = distToPx / lenghtX
+  scaleY = distToPy / lenghtY
+
+  if ( scaleX >= 0 and scaleX <= 1 ) and ( scaleY >= 0 and scaleY <= 1 )
+    return true
+  return false
+
+addPoints = (t, x, y) ->
+  t[#t + 1] = x 
+  t[#t + 1] = y 
+
+getSegmentSegmentIntersection = (x1, y1, x2, y2, x3, y3, x4, y4 ) ->
+  slope1, intercept1 = getSlope(x1, y1, x2, y2), getYIntercept(x1, y1, x2, y2)
+  slope2, intercept2 = getSlope(x3, y3, x4, y4), getYIntercept(x3, y3, x4, y4)
+
+  if ((slope1 and slope2) and checkFuzzy(slope1, slope2)) or (slope1 == false and slope2 == false)
+    if checkFuzzy(intercept1, intercept2)
+      points = {}
+      if checkSegmentPoint(x1, y1, x3, y3, x4, y4) then addPoints( points, x1, y1 )
+      if checkSegmentPoint(x2, y2, x3, y3, x4, y4) then addPoints( points, x2, y2 )
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2) then addPoints( points, x3, y3 )
+      if checkSegmentPoint(x4, y4, x1, y1, x2, y2) then addPoints( points, x4, y4 )
+
+      points = removeDuplicatePointsFlat(points)
+      if #points == 0 then return false
+      return unpack points
+    else
+      return false
+
+  x, y = getLineLineIntersection x1, y1, x2, y2, x3, y3, x4, y4
+      
+  if x and checkSegmentPoint(x, y, x1, y1, x2, y2) and checkSegmentPoint(x, y, x3, y3, x4, y4)
+    return x, y
+
+  false
+
+
+
 
   
 {
