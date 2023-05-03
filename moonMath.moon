@@ -534,7 +534,7 @@ getQuadraticRoots = (a, b, c) ->
   if discriminant < 0 then return false
   discriminant = math.sqrt discriminant
   denominator = 2 * a
-  (-b - discriminant) / denominator, (-b + discriminant) / denominator
+  (-b - discriminant)/denominator, (-b + discriminant)/denominator
 
 getAngle = (x1, y1, x2, y2, x3, y3) ->
   a = getLength x3, y3, x2, y2 
@@ -546,8 +546,135 @@ getAngle = (x1, y1, x2, y2, x3, y3) ->
 
 --- Circle
 
+getCircleArea = (radius) ->
+  math = math
+  math.pi * (radius * radius)
 
-{
+checkCirclePoint = (x, y, circleX, circleY, radius) ->
+  getLength(circleX, circleY, x, y) <= radius
+
+isPointOnCircle = (x, y, circleX, circleY, radius) ->
+  checkFuzzy getLength(circleX, circleY, x, y), radius
+
+getCircumference = (radius) ->
+  math = math
+  2 * math.pi * radius
+
+getCircleLineIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
+  slope = getSlope(x1, y1, x2, y2) 
+  intercept = getYIntercept(x1, y1, slope)
+
+  if slope
+    a = (1 + slope ^ 2)
+    b = (-2 * (circleX) + (2 * slope * intercept) - (2 * circleY * slope))
+    c = (circleX ^ 2 + intercept ^ 2 - 2 * (circleY) * (intercept) + circleY ^ 2 - radius ^ 2)
+
+    x1, x2 = getQuadraticRoots(a, b, c)
+
+    if x1 == false then return x1
+
+    y1 = slope * x1 + intercept
+    y2 = slope * x2 + intercept
+
+
+    if checkFuzzy(x1, x2) and checkFuzzy(y1, y2)
+      return 'tangent', x1, y1
+    else
+      return 'secant', x1, y1, x2, y2
+
+  else
+    local intercept
+    lengthToPoint1 = circleX - x1
+    intercept = math.sqrt(-(lengthToPoint1 ^ 2 - radius ^ 2))
+
+    if -(lengthToPoint1 ^ 2 - radius ^ 2) < 0 then return false
+
+    bottomX, bottomY = x1, circleY - intercept
+    topX, topY = x1, circleY + intercept
+
+    if topY ~= bottomY
+      return 'secant', topX, topY, bottomX, bottomY
+    else
+      return 'tangent', topX, topY
+
+
+
+
+getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
+  Type, x3, y3, x4, y4 = getCircleLineIntersection(circleX, circleY, radius, x1, y1, x2, y2)
+  if Type == false then return false
+
+  slope, intercept = getSlope(x1, y1, x2, y2), getYIntercept(x1, y1, x2, y2)
+
+  if isPointOnCircle(x1, y1, circleX, circleY, radius) and 
+    isPointOnCircle(x2, y2, circleX, circleY, radius)
+    return 'chord', x1, y1, x2, y2
+
+  if slope
+    if checkCirclePoint(x1, y1, circleX, circleY, radius) and 
+      checkCirclePoint(x2, y2, circleX, circleY, radius)
+      return 'enclosed', x1, y1, x2, y2
+    elseif x3 and x4
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2) and
+        checkSegmentPoint(x4, y4, x1, y1, x2, y2) == false
+        return 'tangent', x3, y3
+      elseif checkSegmentPoint(x4, y4, x1, y1, x2, y2) and
+        checkSegmentPoint(x3, y3, x1, y1, x2, y2) == false
+        return 'tangent', x4, y4
+      else
+        if checkSegmentPoint(x3, y3, x1, y1, x2, y2) and
+          checkSegmentPoint(x4, y4, x1, y1, x2, y2)
+          return 'secant', x3, y3, x4, y4
+        else
+          return false
+    elseif x4 == false
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2)
+        return 'tangent', x3, y3
+      else
+        local length, distance1, distance2
+        length = getLength(x1, y1, x2, y2)
+        distance1 = getLength(x1, y1, x3, y3)
+        distance2 = getLength(x2, y2, x3, y3)
+
+        if length > distance1 or length > distance2 then return false
+        elseif length < distance1 and length < distance2 then return false
+        else return 'tangent', x3, y3
+  else
+    math = math
+    lengthToPoint1 = circleX - x1
+    remainingDistance = lengthToPoint1 - radius
+    intercept = math.sqrt(-(lengthToPoint1 ^ 2 - radius ^ 2))
+
+    if -(lengthToPoint1 ^ 2 - radius ^ 2) < 0 then return false
+
+    topX, topY = x1, circleY - intercept
+    bottomX, bottomY = x1, circleY + intercept
+
+    length = getLength(x1, y1, x2, y2)
+    distance1 = getLength(x1, y1, topX, topY)
+    distance2 = getLength(x2, y2, topX, topY)
+
+    if bottomY ~= topY
+      if checkSegmentPoint(topX, topY, x1, y1, x2, y2) and
+        checkSegmentPoint(bottomX, bottomY, x1, y1, x2, y2)
+        return 'chord', topX, topY, bottomX, bottomY
+      elseif checkSegmentPoint(topX, topY, x1, y1, x2, y2)
+        return 'tangent', topX, topY
+      elseif checkSegmentPoint(bottomX, bottomY, x1, y1, x2, y2)
+        return 'tangent', bottomX, bottomY
+      else return false
+    else
+      if checkSegmentPoint(topX, topY, x1, y1, x2, y2)
+        return 'tangent', topX, topY
+      else
+        return false
+
+
+
+
+
+
+{ 
   point: {
     rotate: rotatePoint
     scale: scalePoint
