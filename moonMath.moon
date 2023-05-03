@@ -491,10 +491,62 @@ getSegmentSegmentIntersection = (x1, y1, x2, y2, x3, y3, x4, y4 ) ->
 
   false
 
+--- Math
+
+getRoot  = (number, root) ->
+  number ^ ( 1 / root )
+
+isPrime = (n) ->
+  math = math
+  if n < 2 then return false
+
+  for i = 2, math.sqrt(n)
+    if n % i == 0
+      return false
+
+  true
 
 
+round = (number, decimals = 0) ->
+  math = math
+  pow = 10 ^ decimals
+  math.floor(number * pow + .5) / pow
 
-  
+getSummation = (start, stop, func) ->
+  rValues = {}
+  sum = 0
+  for i = start, stop
+    val = func i, rValues
+    sum += val
+  sum
+
+getPercentOfChange = (old, new) ->
+  math = math
+  if old == 0 and new == 0 then return 0
+  else return (new - old) / math.abs(old)
+
+getPercenrage = (percent, number) ->
+  percent * number
+
+getQuadraticRoots = (a, b, c) ->
+  math = math
+  discriminant = b ^ 2 - (4 * a * c)
+  if discriminant < 0 then return false
+  discriminant = math.sqrt discriminant
+  denominator = 2 * a
+  (-b - discriminant) / denominator, (-b + discriminant) / denominator
+
+getAngle = (x1, y1, x2, y2, x3, y3) ->
+  a = getLength x3, y3, x2, y2 
+  b = getLength x1, y1, x2, y2 
+  c = getLength x1, y1, x3, y3
+
+  math.acos (a * a + b * b - c * c) / (2 * a * b)
+
+
+--- Circle
+
+
 {
   point: {
     rotate: rotatePoint
