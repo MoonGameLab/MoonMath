@@ -1,0 +1,10 @@
+================================================
+(Apr 20 - 2023)
+================================================
+[change] Statistics will not be introduced in moonMath
+
+================================================
+(Apr 20 - 2023)
+================================================
+[BUGFIX] removeDuplicatePointsFlat loop bug.
+    see: https://github.com/davisdude/mlib/issues/17
