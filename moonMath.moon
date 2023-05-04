@@ -710,6 +710,221 @@ isSegmentCompletelyInsideCircle = (circleX, circleY, circleRadius, x1, y1, x2, y
 
 --- Poly
 
+getSignedPolygonArea = (...) ->
+  points = checkInput ...
+
+  points[#points + 1] = points[1]
+  points[#points + 1] = points[2]
+
+  return (.5 * getSummation( 1, #points / 2,
+    (index) ->
+      index *= 2 - 1
+      return ((points[index] * cycle(points, index + 3 )) - (cycle(points, index + 2) * points[index + 1]))
+      
+  ))
+    
+
+getPolygonArea = (...) ->
+  math = math
+  math.abs(getSignedPolygonArea( ... ))
+
+getTriangleHeight = (base, ...) ->
+  input = checkInput ...
+  local area
+
+  if #input == 1 then area = input[1]
+  else area = getPolygonArea input
+
+  (2 * area) / base, area
+
+getCentroid = (...) ->
+  points = checkInput ...
+
+  points[#points + 1] = points[1]
+  points[#points + 1] = points[2]
+
+  area = getSignedPolygonArea points
+
+  centroidX = (1 / (6 * area)) * ( getSummation(1, #points / 2,
+    (index) ->
+      index *= 2 - 1
+      return ((points[index] + cycle(points, index + 2 )) * ((points[index] * cycle(points, index + 3)) - (cycle(points, index + 2) * points[index + 1])))
+  ))
+
+  centroidY = (1 / (6 * area)) * (getSummation(1, #points / 2,
+    (index) ->
+      index *= 2 - 1
+      return ((points[index + 1] + cycle(points, index + 3)) * ((points[index] * cycle(points, index + 3)) - (cycle(points, index + 2) * points[index + 1])))
+  ))
+
+  centroidX, centroidY
+
+
+getPolygonLineIntersection = (x1, y1, x2, y2, ...) ->
+  input = checkInput ...
+  choices = {}
+
+  slope = getSlope x1, y1, x2, y2
+  intercept = getYIntercept x1, y1, slope
+
+  local x3, y3, x4, y4
+
+  if slope
+    x3, x4 = 1, 2
+    y3, y4 = slope * x3 + intercept, slope * x4 + intercept
+  else
+    x3, x4 = x1, x1
+    y3, y4 = y1, y2
+
+  for i = 1, #input, 2
+    x1, y1, x2, y2 = getLineSegmentIntersection(input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3), x3, y3, x4, y4)
+    if x1 and not x2 then choices[#choices + 1] = {x1, y1}
+    elseif x1 and x2 then choices[#choices + 1] = {x1, y1, x2, y2}
+  
+  final = removeDuplicatePairs choices
+  #final > 0 and final or false
+
+getPolygonSegmentIntersection = (x1, y1, x2, y2, ...) ->
+  input = checkInput ...
+  choices = {}
+
+  for i = 1, #input, 2
+    x1, y1, x2, y2 = getSegmentSegmentIntersection(input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3), x1, y1, x2, y2)
+    if x1 and not x2 then choices[#choices + 1] = {x1, y1}
+    elseif x2 then choices[#choices + 1] = {x1, y1, x2, y2}
+
+    final = removeDuplicatePairs choices
+    #final > 0 and final or false
+
+
+checkPolygonPoint = (px, py, ...) ->
+  points = {unpack(checkInput(...))}
+
+  greatest, least = getGreatestPoint(points, 0)
+  if isWithinBounds(least, py, greatest) == false then return false
+  greatest, least = getGreatestPoint points
+  if isWithinBounds(least, px, greatest) == false then return false
+
+  count = 0
+  for i = 1, #points, 2
+    if checkFuzzy(points[i + 1], py)
+      points[i + 1] = py + .001
+    if points[i + 3] and checkFuzzy(points[i + 3], py)
+      points[i + 3] = py + .001
+
+    x1, y1 = points[i], points[i + 1]
+    x2, y2 = points[i + 2] or points[1], points[i + 3] or points[2]
+
+    if getSegmentSegmentIntersection(px, py, greatest, py, x1, y1, x2, y2)
+      count = count + 1
+    
+  count and count % 2 ~= 0
+
+
+isSegmentInsidePolygon = (x1, y1, x2, y2, ...) ->
+  input = checkInput ...
+
+  choices = getPolygonSegmentIntersection x1, y1, x2, y2, input
+  if choices then return true 
+
+  if checkPolygonPoint(x1, y1, input) or checkPolygonPoint(x2, y2, input) then return true
+  return false
+
+
+getPolygonPolygonIntersection = (polygon1, polygon2) ->
+  choices = {}
+
+  for index1 = 1, #polygon1, 2
+    intersections = getPolygonSegmentIntersection(polygon1[index1], polygon1[index1 + 1], cycle(polygon1, index1 + 2), cycle(polygon1, index1 + 3), polygon2)
+    if intersections
+      for index2 = 1, #intersections
+        choices[#choices + 1] = intersections[index2]
+
+  for index1 = 1, #polygon2, 2
+    intersections = getPolygonSegmentIntersection(polygon2[index1], polygon2[index1 + 1], cycle( polygon2, index1 + 2), cycle( polygon2, index1 + 3), polygon1)
+    if intersections
+      for index2 = 1, #intersections
+        choices[#choices + 1] = intersections[index2]
+
+  choices = removeDuplicatePairs choices
+  for i = #choices, 1, -1
+    if type(choices[i][1]) == 'table'
+      table.remove(choices, i)
+
+  #choices > 0 and choices
+
+
+getPolygonCircleIntersection = (x, y, radius, ...) ->
+  input = checkInput ...
+  choices = {}
+
+  for i = 1, #input, 2
+    Type, x1, y1, x2, y2 = getCircleSegmentIntersection(x, y, radius, input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3))
+    
+    if x2
+      choices[#choices + 1] = {Type, x1, y1, x2, y2}
+    elseif x1 then choices[#choices + 1] = {Type, x1, y1}
+
+  final = removeDuplicates4Points choices
+  #final > 0 and final
+
+
+isPolygonInsidePolygon = (polygon1, polygon2) ->
+  bool = false
+
+  for i = 1, #polygon2, 2
+    result = false
+    result = isSegmentInsidePolygon(polygon2[i], polygon2[i + 1], cycle(polygon2, i + 2), cycle(polygon2, i + 3), polygon1)
+    if result 
+      bool = true
+      break
+  bool
+
+isSegmentCompletelyInsidePolygon = (x1, y1, x2, y2, ...) ->
+  polygon = checkInput ...
+  if checkPolygonPoint(x1, y1, polygon) == false or
+    checkPolygonPoint( x2, y2, polygon ) == false or
+    getPolygonSegmentIntersection(x1, y1, x2, y2, polygon)
+    return false
+
+  true
+
+
+isPolygonCompletelyInsidePolygon = (polygon1, polygon2) ->
+  for i = 1, #polygon1, 2
+    x1, y1 = polygon1[i], polygon1[i + 1]
+    x2, y2 = polygon1[i + 2] or polygon1[1], polygon1[i + 3] or polygon1[2]
+    if isSegmentCompletelyInsidePolygon(x1, y1, x2, y2, polygon2) == false
+      return false
+
+  true
+
+
+isPolygonCompletelyInsideCircle = (circleX, circleY, circleRadius, ...) ->
+  input = checkInput ...
+  isDistanceLess = (px, py, x, y, circleRadius) ->
+    distanceX, distanceY = px - x, py - y
+    return distanceX * distanceX + distanceY * distanceY < circleRadius * circleRadius
+
+  for i = 1, #input, 2
+    if checkCirclePoint(input[i], input[i + 1], circleX, circleY, circleRadius) == false then return false
+
+  true
+
+isCircleCompletelyInsidePolygon = (circleX, circleY, circleRadius, ...) ->
+  input = checkInput ...
+  if checkPolygonPoint(circleX, circleY, ...) == false then return false
+    
+  rad2 = circleRadius * circleRadius
+
+  for i = 1, #input, 2
+    x1, y1 = input[i], input[i + 1]
+    x2, y2 = input[i + 2] or input[1], input[i + 3] or input[2]
+    if distance2(x1, y1, circleX, circleY) <= rad2 then return false
+    if getCircleSegmentIntersection(circleX, circleY, circleRadius, x1, y1, x2, y2) then return false
+
+  true
+
 { 
   point: {
     rotate: rotatePoint
