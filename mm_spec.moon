@@ -57,7 +57,9 @@ describe "Point", ->
     assert.multipleFUzzyEqual point.rotate(2, 2, -math.pi / 6), {02.7320508075600003, .7320508075600001}
 
 
-
+  it "Rotates a point.", ->
+    assert.multipleFUzzyEqual point.rotate(2, 3, math.pi / 2, 2, -2), {-3, -2}
+    assert.multipleFUzzyEqual point.rotate(-6, 1, math.pi,-1, 2 ), { 4, 3 }
 
 
 

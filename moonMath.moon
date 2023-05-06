@@ -462,10 +462,25 @@ checkSegmentPoint = ( px, py, x1, y1, x2, y2 ) ->
     return true
   return false
 
+--- adds point to a table
+-- @tparam table t
+-- @tparam number x
+-- @tparam number y
 addPoints = (t, x, y) ->
   t[#t + 1] = x 
   t[#t + 1] = y 
 
+
+--- gets the point of intersection between two line segments
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number x3
+-- @tparam number y3
+-- @tparam number x4
+-- @tparam number y4
+-- @treturn bool
 getSegmentSegmentIntersection = (x1, y1, x2, y2, x3, y3, x4, y4 ) ->
   slope1, intercept1 = getSlope(x1, y1, x2, y2), getYIntercept(x1, y1, x2, y2)
   slope2, intercept2 = getSlope(x3, y3, x4, y4), getYIntercept(x3, y3, x4, y4)
@@ -493,9 +508,16 @@ getSegmentSegmentIntersection = (x1, y1, x2, y2, x3, y3, x4, y4 ) ->
 
 --- Math
 
+--- gets the root of a number
+-- @tparam number number
+-- @tparam number root
+-- @treturn number
 getRoot  = (number, root) ->
   number ^ ( 1 / root )
 
+--- checks if a number is prime
+-- @tparam number n
+-- @treturn bool
 isPrime = (n) ->
   math = math
   if n < 2 then return false
@@ -506,12 +528,21 @@ isPrime = (n) ->
 
   true
 
-
+--- rounds a number to the xth decimal place
+-- @tparam number number
+-- @tparam number decimals
+-- @treturn number
 round = (number, decimals = 0) ->
   math = math
   pow = 10 ^ decimals
   math.floor(number * pow + .5) / pow
 
+
+--- gets the summation given a local function
+-- @tparam number start
+-- @tparam number stop
+-- @tparam function func
+-- @treturn number
 getSummation = (start, stop, func) ->
   rValues = {}
   sum = 0
@@ -520,14 +551,28 @@ getSummation = (start, stop, func) ->
     sum += val
   sum
 
+--- gets the percent of change
+-- @tparam number old
+-- @tparam number new  
+-- @tparam number  
 getPercentOfChange = (old, new) ->
   math = math
   if old == 0 and new == 0 then return 0
   else return (new - old) / math.abs(old)
 
+
+--- gets the percentage of a number
+-- @tparam number percent
+-- @tparam number number  
+-- @tparam number  
 getPercenrage = (percent, number) ->
   percent * number
 
+--- gets the quadratic roots of an equation
+-- @tparam number a
+-- @tparam number b
+-- @tparam number c
+-- @tparam number table  
 getQuadraticRoots = (a, b, c) ->
   math = math
   discriminant = b ^ 2 - (4 * a * c)
@@ -536,6 +581,14 @@ getQuadraticRoots = (a, b, c) ->
   denominator = 2 * a
   (-b - discriminant)/denominator, (-b + discriminant)/denominator
 
+--- gets the angle between three points
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number x3
+-- @tparam number y3
+-- @treturn number
 getAngle = (x1, y1, x2, y2, x3, y3) ->
   a = getLength x3, y3, x2, y2 
   b = getLength x1, y1, x2, y2 
@@ -546,20 +599,51 @@ getAngle = (x1, y1, x2, y2, x3, y3) ->
 
 --- Circle
 
+--- gets the area of the circle
+-- @tparam number radius
+-- @treturn number
 getCircleArea = (radius) ->
   math = math
   math.pi * (radius * radius)
 
+
+--- checks if a point is within the radius of a circle
+-- @tparam number x
+-- @tparam number y
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @treturn bool
 checkCirclePoint = (x, y, circleX, circleY, radius) ->
   getLength(circleX, circleY, x, y) <= radius
 
+--- checks if a point is on a circle
+-- @tparam number x
+-- @tparam number y
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @treturn bool
 isPointOnCircle = (x, y, circleX, circleY, radius) ->
   checkFuzzy getLength(circleX, circleY, x, y), radius
 
+
+--- gets the circumference of a circle
+-- @tparam number radius
+-- @treturn number
 getCircumference = (radius) ->
   math = math
   2 * math.pi * radius
 
+--- gets the intersection of a line and a circle
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn table { ratio, ... }
 getCircleLineIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
   slope = getSlope(x1, y1, x2, y2) 
   intercept = getYIntercept(x1, y1, slope)
@@ -599,7 +683,15 @@ getCircleLineIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
 
 
 
-
+--- gets the type of intersection of a line segment
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn table {circularSeg, ...}
 getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
   Type, x3, y3, x4, y4 = getCircleLineIntersection(circleX, circleY, radius, x1, y1, x2, y2)
   if Type == false then return false
@@ -669,7 +761,14 @@ getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
       else
         return false
 
-
+--- checks if one circle intersects another circle
+-- @tparam number circle1x
+-- @tparam number circle1y
+-- @tparam number radius1
+-- @tparam number circle2x
+-- @tparam number circle2y
+-- @tparam number radius2
+-- @treturn table {intersection, ...}
 getCircleCircleIntersection = (circle1x, circle1y, radius1, circle2x, circle2y, radius2) ->
   length = getLength(circle1x, circle1y, circle2x, circle2y)
   if length > radius1 + radius2 then return false
@@ -698,18 +797,39 @@ getCircleCircleIntersection = (circle1x, circle1y, radius1, circle2x, circle2y, 
 
   return 'intersection', p3x, p3y, p4x, p4y
 
+
+--- checks if circle1 is entirely inside of circle2
+-- @tparam number circle1x
+-- @tparam number circle1y
+-- @tparam number circle1radius
+-- @tparam number circle2x
+-- @tparam number circle2y
+-- @tparam number circle2radius
+-- @treturn bool
 isCircleCompletelyInsideCircle = (circle1x, circle1y, circle1radius, circle2x, circle2y, circle2radius) ->
   if checkCirclePoint(circle1x, circle1y, circle2x, circle2y, circle2radius) == false then return false
   Type = getCircleCircleIntersection(circle2x, circle2y, circle2radius, circle1x, circle1y, circle1radius)
   if (Type ~= 'tangent' and Type ~= 'collinear' and Type ~= 'inside') then return false
   return true
 
+--- checks if a line-segment is entirely within a circle
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number circleRadius
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn bool
 isSegmentCompletelyInsideCircle = (circleX, circleY, circleRadius, x1, y1, x2, y2) ->
   Type = getCircleSegmentIntersection(circleX, circleY, circleRadius, x1, y1, x2, y2)
   return Type == 'enclosed'
 
 --- Poly
 
+--- gets the signed area (If the points are clockwise the number is negative, otherwise, it's positive)
+-- @tparam ... points
+-- @treturn number
 getSignedPolygonArea = (...) ->
   points = checkInput ...
 
@@ -723,11 +843,17 @@ getSignedPolygonArea = (...) ->
       
   ))
     
-
+--- gets the area of the polygon
+-- @tparam ... points
+-- @treturn number
 getPolygonArea = (...) ->
   math = math
   math.abs(getSignedPolygonArea( ... ))
 
+--- gets the height of a triangle, given the base
+-- @tparam number base
+-- @tparam ... points
+-- @treturn number
 getTriangleHeight = (base, ...) ->
   input = checkInput ...
   local area
@@ -737,6 +863,10 @@ getTriangleHeight = (base, ...) ->
 
   (2 * area) / base, area
 
+
+--- gets the centroid of the polygon
+-- @tparam ... points
+-- @treturn number
 getCentroid = (...) ->
   points = checkInput ...
 
@@ -759,7 +889,13 @@ getCentroid = (...) ->
 
   centroidX, centroidY
 
-
+--- checks whether or not a line intersects a polygon
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number ...
+-- @treturn bool
 getPolygonLineIntersection = (x1, y1, x2, y2, ...) ->
   input = checkInput ...
   choices = {}
@@ -784,6 +920,13 @@ getPolygonLineIntersection = (x1, y1, x2, y2, ...) ->
   final = removeDuplicatePairs choices
   #final > 0 and final or false
 
+--- checks if the line segment intersects the polygon
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number ...
+-- @treturn bool
 getPolygonSegmentIntersection = (x1, y1, x2, y2, ...) ->
   input = checkInput ...
   choices = {}
@@ -796,7 +939,11 @@ getPolygonSegmentIntersection = (x1, y1, x2, y2, ...) ->
     final = removeDuplicatePairs choices
     #final > 0 and final or false
 
-
+--- checks if the point lies inside the polygon not on the polygon
+-- @tparam number px
+-- @tparam number py
+-- @tparam number ...
+-- @treturn bool
 checkPolygonPoint = (px, py, ...) ->
   points = {unpack(checkInput(...))}
 
@@ -820,7 +967,13 @@ checkPolygonPoint = (px, py, ...) ->
     
   count and count % 2 ~= 0
 
-
+--- gets if the line segment is fully or partially inside
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number ...
+-- @treturn bool
 isSegmentInsidePolygon = (x1, y1, x2, y2, ...) ->
   input = checkInput ...
 
@@ -830,7 +983,10 @@ isSegmentInsidePolygon = (x1, y1, x2, y2, ...) ->
   if checkPolygonPoint(x1, y1, input) or checkPolygonPoint(x2, y2, input) then return true
   return false
 
-
+--- checks whether two polygons intersect
+-- @tparam table polygon1
+-- @tparam table polygon2
+-- @treturn bool
 getPolygonPolygonIntersection = (polygon1, polygon2) ->
   choices = {}
 
@@ -853,7 +1009,12 @@ getPolygonPolygonIntersection = (polygon1, polygon2) ->
 
   #choices > 0 and choices
 
-
+--- checks whether two polygons intersect
+-- @tparam number x
+-- @tparam number y
+-- @tparam number radius
+-- @tparam table ...
+-- @treturn bool
 getPolygonCircleIntersection = (x, y, radius, ...) ->
   input = checkInput ...
   choices = {}
@@ -868,7 +1029,10 @@ getPolygonCircleIntersection = (x, y, radius, ...) ->
   final = removeDuplicates4Points choices
   #final > 0 and final
 
-
+--- checks whether the polygon is inside the polygon
+-- @tparam table polygon1
+-- @tparam table polygon2
+-- @treturn bool
 isPolygonInsidePolygon = (polygon1, polygon2) ->
   bool = false
 
@@ -880,6 +1044,13 @@ isPolygonInsidePolygon = (polygon1, polygon2) ->
       break
   bool
 
+--- checks if a segment is completely inside a polygon
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam table ...
+-- @treturn bool
 isSegmentCompletelyInsidePolygon = (x1, y1, x2, y2, ...) ->
   polygon = checkInput ...
   if checkPolygonPoint(x1, y1, polygon) == false or
@@ -889,7 +1060,10 @@ isSegmentCompletelyInsidePolygon = (x1, y1, x2, y2, ...) ->
 
   true
 
-
+--- hecks if a polygon is completely inside another polygon
+-- @tparam table polygon1
+-- @tparam table polygon2
+-- @treturn bool
 isPolygonCompletelyInsidePolygon = (polygon1, polygon2) ->
   for i = 1, #polygon1, 2
     x1, y1 = polygon1[i], polygon1[i + 1]
@@ -899,7 +1073,12 @@ isPolygonCompletelyInsidePolygon = (polygon1, polygon2) ->
 
   true
 
-
+--- checks if a polygon is completely within a circle
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number circleRadius
+-- @tparam table ... inpt
+-- @treturn bool
 isPolygonCompletelyInsideCircle = (circleX, circleY, circleRadius, ...) ->
   input = checkInput ...
   isDistanceLess = (px, py, x, y, circleRadius) ->
@@ -911,6 +1090,12 @@ isPolygonCompletelyInsideCircle = (circleX, circleY, circleRadius, ...) ->
 
   true
 
+--- checks if a circle is completely within a polygon
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number circleRadius
+-- @tparam table ... inpt
+-- @treturn bool
 isCircleCompletelyInsidePolygon = (circleX, circleY, circleRadius, ...) ->
   input = checkInput ...
   if checkPolygonPoint(circleX, circleY, ...) == false then return false
@@ -938,9 +1123,78 @@ isCircleCompletelyInsidePolygon = (circleX, circleY, circleRadius, ...) ->
     getSlope: getSlope
     getPerpendicularSlope: getPerpendicularSlope
     getYIntercept: getYIntercept
+
     getLineIntersection: getLineLineIntersection
+    getIntersection: getLineLineIntersection
+
     getClosestPoint: getClosestPoint
     getSegmentIntersection: getLineSegmentIntersection
+
     checkLinePoint: checkLinePoint
+    checkPoint: checkLinePoint
   }
+  
+  segment: {
+    checkPoint: checkSegmentPoint
+    getPerpendicularBisector: getPerpendicularBisector
+    getIntersection:getSegmentSegmentIntersection
+
+    getCircleIntersection: getCircleSegmentIntersection
+    getPolygonIntersection: getPolygonSegmentIntersection
+    getLineIntersection: getLineSegmentIntersection
+    getSegmentIntersection: getSegmentSegmentIntersection
+    isSegmentCompletelyInsideCircle: isSegmentCompletelyInsideCircle
+    isSegmentCompletelyInsidePolygon: isSegmentCompletelyInsidePolygon
+  }
+
+  math: {
+    getRoot: getRoot
+    isPrime:isPrime
+    round:round
+    getSummation:	getSummation
+    getPercentOfChange: getPercentOfChange
+    getPercentage: getPercentage
+    getQuadraticRoots:getQuadraticRoots
+    getAngle: getAngle
+  }
+  
+  circle: {
+    getArea: getCircleArea
+    checkPoint: checkCirclePoint
+    isPointOnCircle: isPointOnCircle
+    getCircumference: getCircumference
+    getLineIntersection: getCircleLineIntersection
+    getSegmentIntersection: getCircleSegmentIntersection
+    getCircleIntersection: getCircleCircleIntersection
+    isCircleCompletelyInside: isCircleCompletelyInsideCircle
+    isPolygonCompletelyInside: isPolygonCompletelyInsideCircle
+    isSegmentCompletelyInside: isSegmentCompletelyInsideCircle
+
+    getPolygonIntersection: getPolygonCircleIntersection
+    isCircleInsidePolygon: isCircleInsidePolygon
+    isCircleCompletelyInsidePolygon: isCircleCompletelyInsidePolygon
+  }
+
+  polygon: {
+    getSignedArea: getSignedPolygonArea
+    getArea: getPolygonArea
+    getTriangleHeight: getTriangleHeight
+    getCentroid: getCentroid
+    getLineIntersection: getPolygonLineIntersection
+    getSegmentIntersection: getPolygonSegmentIntersection
+    checkPoint: checkPolygonPoint
+    isSegmentInside: isSegmentInsidePolygon
+    getPolygonIntersection: getPolygonPolygonIntersection
+    getCircleIntersection: getPolygonCircleIntersection
+    isCircleInside: isCircleInsidePolygon
+    isPolygonInside: isPolygonInsidePolygon
+    isCircleCompletelyInside: isCircleCompletelyInsidePolygon
+    isSegmentCompletelyInside: isSegmentCompletelyInsidePolygon
+    isPolygonCompletelyInside: isPolygonCompletelyInsidePolygon
+
+
+    isCircleCompletelyOver: isPolygonCompletelyInsideCircle
+  }
+
+
 }
