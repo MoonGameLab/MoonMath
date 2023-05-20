@@ -1009,6 +1009,22 @@ getPolygonPolygonIntersection = (polygon1, polygon2) ->
 
   #choices > 0 and choices
 
+
+removeDuplicates4Points = (tab) ->
+  table = table
+  for index1 = #tab, 1, -1
+    first = tab[index1]
+    for index2 = #tab, 1, -1
+      second = tab[index2]
+      if index1 ~= index2
+        if type(first[1]) ~= type(second[1]) then return false
+        if type(first[2]) == 'number' and type(second[2]) == 'number' and type(first[3]) == 'number' and type(second[3]) == 'number'
+          if checkFuzzy(first[2], second[2]) and checkFuzzy(first[3], second[3])
+            table.remove tab, index1
+        elseif checkFuzzy(first[1], second[1]) and checkFuzzy(first[2], second[2]) and checkFuzzy(first[3], second[3])
+          table.remove tab, index1
+
+  tab
 --- checks whether two polygons intersect
 -- @tparam number x
 -- @tparam number y

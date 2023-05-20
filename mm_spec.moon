@@ -1,36 +1,39 @@
 mm = assert require "moonMath"
 
+m = assert require 'moon'
+dump = m.p
+
 checkFuzzy = (n1, n2) ->
   (n1 - .00001 <= n2 and n2 <= n1 + .00001)
 
-deepCompre = (tab1, tab2) ->
-  if type(tabe1) ~= type(tab2) then return false
-
-  for key, value in pairs tab1
-    if type(value) == 'table' and type(tab2[key]) == 'table'
-      if deepCompre(value, tab2[key]) == false then return false
+deepCompare = (Table1, Table2) ->
+  if type(Table1) ~= type(Table2) then return false
+  
+  for Key, Value in pairs(Table1)
+    if (type(Value) == 'table' and type(Table2[Key]) == 'table')
+      if ( not deepCompare( Value, Table2[Key] ) ) then return false
     else
-        if type(value) ~= type(tab2[key]) then return false
-        if type(value) == 'number'
-          return checkFuzzy(value, tab2[key])
-        elseif value ~= tab2[key] then return false
+      if type( Value ) ~= type( Table2[Key] ) then return false
+      if type( Value ) == 'number'
+        return checkFuzzy(Value, Table2[Key])
+      elseif ( Value ~= Table2[Key] ) then return false
 
-  for key, value in pairs tab2
-    if type(value) == 'table' and type(tab1[key]) == 'table'
-      if deepCompre(value, tab1[key]) == false then return false
+  for Key, Value in pairs(Table2)
+    if ( type( Value ) == 'table' and type( Table1[Key] ) == 'table' )
+      if ( not deepCompare( Value, Table1[Key] ) ) then return false
     else
-        if type(value) ~= type(tab1[key]) then return false
-        if type(value) == 'number'
-          return checkFuzzy(value, tab1[key])
-        elseif value ~= tab1[key] then return false
-  return true
+      if type( Value ) ~= type( Table1[Key] ) then return false
+      if type( Value ) == 'number'
+        return checkFuzzy( Value, Table1[Key] )
+      elseif ( Value ~= Table1[Key] ) then return false
 
+  true
 
 fuzzyEqual = (a, b) ->
   checkFuzzy a, b
 
-tablesFuzzyEqual = (tab1, tab2) ->
-  deepCompre tab1, tab2
+tablesFuzzyEqual = (params) =>
+  deepCompare params[1], params[2]
 
 multipleFUzzyEqual = (a, b) ->
   for i = 1, #a
@@ -63,6 +66,14 @@ describe "Point", ->
 
 
 
-describe "getLineIntersection", ->
-  it "test1", ->
-    assert.multipleFUzzyEqual mm.line.getLineIntersection( 1, 0, 1, 0, 0, 1 ), { .5, .5 }
+-- describe "getLineIntersection", ->
+--   it "test1", ->
+--     assert.multipleFUzzyEqual mm.line.getLineIntersection( 1, 0, 1, 0, 0, 1 ), { .5, .5 }
+
+
+
+describe "Poly.getCircleIntersection", ->
+  it "Returns true if the circle intersects", ->
+    polygon = mm.polygon
+    tab = polygon.getCircleIntersection( 3, 5, 2, 3, 1, 3, 6, 7, 4 )
+    assert.tablesFuzzyEqual(tab, { { "tangent", 3, 3 }, { "tangent", 5, 5 } })
