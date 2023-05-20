@@ -51,29 +51,34 @@ assert\register "assertion", "multipleFUzzyEqual",multipleFUzzyEqual
 
 
 --- Point
-describe "Point", ->
+describe "point.rotate", ->
   point = mm.point
 
-  it "Rotates a point.", ->
-    assert.multipleFUzzyEqual point.rotate(3, 6, math.pi), {-3, -6}
-    assert.multipleFUzzyEqual point.rotate(3, 6, 2 * math.pi), {3, 6}
-    assert.multipleFUzzyEqual point.rotate(2, 2, -math.pi / 6), {02.7320508075600003, .7320508075600001}
+  it " :: Rotates a point.", ->
+    assert.multipleFUzzyEqual {point.rotate(3, 6, math.pi)}, {-3, -6}
+    assert.multipleFUzzyEqual {point.rotate(3, 6, 2 * math.pi)}, {3, 6}
+    assert.multipleFUzzyEqual {point.rotate(2, 2, -math.pi / 6)}, {02.7320508075600003, .7320508075600001}
 
 
-  it "Rotates a point.", ->
-    assert.multipleFUzzyEqual point.rotate(2, 3, math.pi / 2, 2, -2), {-3, -2}
-    assert.multipleFUzzyEqual point.rotate(-6, 1, math.pi,-1, 2 ), { 4, 3 }
+  it " :: Rotates about other point.", ->
+    assert.multipleFUzzyEqual {point.rotate(2, 3, math.pi / 2, 2, -2)}, {-3, -2}
+    assert.multipleFUzzyEqual {point.rotate(-6, 1, math.pi,-1, 2 )}, { 4, 3 }
+  
+describe "point.scale", ->
+  point = mm.point
 
+  it " :: Scales a point.", ->
+    print "\npoint.scale :: "
+    dump {point.scale(-2, -2, 2 )}
+    assert.multipleFUzzyEqual {point.scale(-2, -2, 2 )}, {-4, -4}
+    assert.multipleFUzzyEqual {point.scale(6, -3, 1/3)}, {2, -1}
 
+  it " :: Scales a point about other point.", ->
+    print "\npoint.scale :: "
+    dump {point.scale(2, 4, .5, -2, -2)}
+    assert.multipleFUzzyEqual {point.scale(2, 4, .5, -2, -2)}, {0, 1}
+    assert.multipleFUzzyEqual {point.scale(5, -1, 5/3, -4, -4)}, {11, 1}
+    assert.multipleFUzzyEqual {point.scale(6, 4, 4/5, 5, -1)}, {5.8, 3}
 
--- describe "getLineIntersection", ->
---   it "test1", ->
---     assert.multipleFUzzyEqual mm.line.getLineIntersection( 1, 0, 1, 0, 0, 1 ), { .5, .5 }
+  
 
-
-
-describe "Poly.getCircleIntersection", ->
-  it "Returns true if the circle intersects", ->
-    polygon = mm.polygon
-    tab = polygon.getCircleIntersection( 3, 5, 2, 3, 1, 3, 6, 7, 4 )
-    assert.tablesFuzzyEqual(tab, { { "tangent", 3, 3 }, { "tangent", 5, 5 } })
