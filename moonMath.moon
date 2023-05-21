@@ -129,7 +129,7 @@ distance2 = (x1, y1, x2, y2) ->
 
 --- Points
 
---- Rotate a point
+--- Rotate a point [tested]
 -- @tparam number x
 -- @tparam number y
 -- @tparam number rot
@@ -140,7 +140,7 @@ rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
   math = math
   (x - ox) * math.cos(rot) + ox - (y - oy) * math.sin(rot), (x - ox) * math.sin(rot) + (y - oy) * math.cos(rot) + oy
 
---- scales a point
+--- scales a point [tested]
 -- @tparam number x
 -- @tparam number y
 -- @tparam number scale
@@ -149,3 +149,34 @@ rotatePoint = (x, y, rot, ox = 0, oy = 0) ->
 -- @treturn table {x, y}
 scalePoint = (x, y, scale, ox = 0, oy = 0) ->
   (x - ox) * scale + ox, (y - oy) * scale + oy
+
+--- From polar to cartesian [tested]
+-- @tparam number radius
+-- @tparam number theta
+-- @tparam number offsetRadius
+-- @tparam number offsetTheta
+-- @treturn table {x, y}  
+polarToCartesian = (radius, theta, offsetRadius, offsetTheta) ->
+  math = math
+  ox, oy = 0, 0
+  if offsetRadius and offsetTheta
+    ox, oy = unpack polarToCartesian(offsetRadius, offsetTheta)
+  
+  x = radius * math.cos(theta)
+  y = radius * math.sin(theta)
+
+  {x + ox, y + oy}
+
+--- From cartesian to polar [tested]
+-- @tparam number x
+-- @tparam number y
+-- @tparam number ox
+-- @tparam number oy
+-- @treturn table {radius, theta}  
+cartesianToPolar = (x, y, ox, oy) ->
+  math = math
+  x, y = x - (ox or 0), y - (oy or 0)
+  theta = math.atan2(y, x)
+  theta = theta > 0 and theta or theta + 2 * math.pi
+  radius = math.sqrt(x ^ 2 + y ^ 2)
+  {radius, theta}
