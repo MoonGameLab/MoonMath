@@ -1,3 +1,5 @@
+-- @module MoonMath
+
 type = type
 table = table
 unpack = table.unpack or unpack

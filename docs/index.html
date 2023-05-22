@@ -28,8 +28,16 @@
 
 
 
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+</ul>
 
 
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>moonMath</strong></li>
+</ul>
 <h2>Topics</h2>
 <ul class="">
   <li><a href="topics/README.md.html">README</a></li>
@@ -39,22 +47,1067 @@
 
 <div id="content">
 
+<h1>Module <code>moonMath</code></h1>
+<p>Remove multiple occurrences of pairs { {x, y}, {x, y} }.</p>
+<p>
 
-  <p>TODO</p>
+</p>
 
-<h2>Topics</h2>
-<table class="module_list">
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
 	<tr>
-		<td class="name" nowrap><a href="topics/README.md.html">README.md</a></td>
-		<td class="summary"></td>
+	<td class="name" nowrap><a href="#addPoint">addPoint (t, x, y)</a></td>
+	<td class="summary">Adds a point to a table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#removeDuplicatePointsFlat">removeDuplicatePointsFlat (t)</a></td>
+	<td class="summary">Remove duplicates from a flat table.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#validateNumber">validateNumber (n)</a></td>
+	<td class="summary">checks if a number is valid</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getGreatestPoint">getGreatestPoint (points, offset)</a></td>
+	<td class="summary">Gets the greatest/least points with an offset</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isWithinBounds">isWithinBounds (min, n, max)</a></td>
+	<td class="summary">Checks if a number is within given bounds</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#distance2">distance2 (x1, y1, x2, y2)</a></td>
+	<td class="summary">calculates the distance between two points</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getQuadraticRoots">getQuadraticRoots (a, b, c, table)</a></td>
+	<td class="summary">Math
+ gets the quadratic roots of an equation</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#rotatePoint">rotatePoint (x, y, rot, ox, oy)</a></td>
+	<td class="summary">Rotate a point [tested]</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#scalePoint">scalePoint (x, y, scale, ox, oy)</a></td>
+	<td class="summary">scales a point [tested]</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#polarToCartesian">polarToCartesian (radius, theta, offsetRadius, offsetTheta)</a></td>
+	<td class="summary">From polar to cartesian [tested]</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#cartesianToPolar">cartesianToPolar (x, y, ox, oy)</a></td>
+	<td class="summary">From cartesian to polar [tested]</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getLength">getLength (x1, y1, x2, y2)</a></td>
+	<td class="summary">Gets the leght of a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getMidPoint">getMidPoint (x1, y1, x2, y2)</a></td>
+	<td class="summary">gets the midpoint of a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getSlope">getSlope (x1, y1, x2, y2)</a></td>
+	<td class="summary">gets the slope of a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getPerpendicularSlope">getPerpendicularSlope (input)</a></td>
+	<td class="summary">gives the perpendicular slope of a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getYIntercept">getYIntercept (x, y, ...)</a></td>
+	<td class="summary">gets the y-intercept of a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getLineLineIntersection">getLineLineIntersection (...)</a></td>
+	<td class="summary">gets the intersection of two lines</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getClosestPoint">getClosestPoint (...)</a></td>
+	<td class="summary">gets the closest point on a line to a point</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getLineSegmentIntersection">getLineSegmentIntersection (...)</a></td>
+	<td class="summary">gets the intersection of a line and a line segment</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#checkLinePoint">checkLinePoint (x, y, x1, y1, x2, y2)</a></td>
+	<td class="summary">checks if a point is on a line</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getCircleLineIntersection">getCircleLineIntersection (circleX, circleY, radius, x1, y1, x2, y2)</a></td>
+	<td class="summary">gets the intersection of a line and a circle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getPolygonLineIntersection">getPolygonLineIntersection (x1, y1, x2, y2, ...)</a></td>
+	<td class="summary">checks whether or not a line intersects a polygon</td>
 	</tr>
 </table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "addPoint"></a>
+    <strong>addPoint (t, x, y)</strong>
+    </dt>
+    <dd>
+    Adds a point to a table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        t
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "removeDuplicatePointsFlat"></a>
+    <strong>removeDuplicatePointsFlat (t)</strong>
+    </dt>
+    <dd>
+    Remove duplicates from a flat table.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        newt
+ Byg Fixed see issue : https://github.com/davisdude/mlib/issues/17
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "validateNumber"></a>
+    <strong>validateNumber (n)</strong>
+    </dt>
+    <dd>
+    checks if a number is valid
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">n</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+        validity
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getGreatestPoint"></a>
+    <strong>getGreatestPoint (points, offset)</strong>
+    </dt>
+    <dd>
+    Gets the greatest/least points with an offset
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">points</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">offset</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {greatest, least}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isWithinBounds"></a>
+    <strong>isWithinBounds (min, n, max)</strong>
+    </dt>
+    <dd>
+    Checks if a number is within given bounds
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">min</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">n</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">max</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "distance2"></a>
+    <strong>distance2 (x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    calculates the distance between two points
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getQuadraticRoots"></a>
+    <strong>getQuadraticRoots (a, b, c, table)</strong>
+    </dt>
+    <dd>
+    Math
+ gets the quadratic roots of an equation
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">a</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">b</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">c</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">table</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "rotatePoint"></a>
+    <strong>rotatePoint (x, y, rot, ox, oy)</strong>
+    </dt>
+    <dd>
+    Rotate a point [tested]
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">rot</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ox</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">oy</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "scalePoint"></a>
+    <strong>scalePoint (x, y, scale, ox, oy)</strong>
+    </dt>
+    <dd>
+    scales a point [tested]
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">scale</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ox</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">oy</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "polarToCartesian"></a>
+    <strong>polarToCartesian (radius, theta, offsetRadius, offsetTheta)</strong>
+    </dt>
+    <dd>
+    From polar to cartesian [tested]
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">theta</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">offsetRadius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">offsetTheta</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "cartesianToPolar"></a>
+    <strong>cartesianToPolar (x, y, ox, oy)</strong>
+    </dt>
+    <dd>
+    From cartesian to polar [tested]
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">ox</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">oy</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {radius, theta}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getLength"></a>
+    <strong>getLength (x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    Gets the leght of a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getMidPoint"></a>
+    <strong>getMidPoint (x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    gets the midpoint of a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getSlope"></a>
+    <strong>getSlope (x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    gets the slope of a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">number</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getPerpendicularSlope"></a>
+    <strong>getPerpendicularSlope (input)</strong>
+    </dt>
+    <dd>
+    gives the perpendicular slope of a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">input</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {x1, y1, x2, y2} or slope
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">slope</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getYIntercept"></a>
+    <strong>getYIntercept (x, y, ...)</strong>
+    </dt>
+    <dd>
+    gets the y-intercept of a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {x2, y2} or slope
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {number, bool}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getLineLineIntersection"></a>
+    <strong>getLineLineIntersection (...)</strong>
+    </dt>
+    <dd>
+    gets the intersection of two lines
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {slope1, slope2, x1, y1, x2, y2} or {slope1, intercept1, slope2, intercept2} or {x1, y1, x2, y2, x3, y3, x4, y4}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getClosestPoint"></a>
+    <strong>getClosestPoint (...)</strong>
+    </dt>
+    <dd>
+    gets the closest point on a line to a point
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {perpendicularX, perpendicularY, x1, y1, x2, y2} or {perpendicularX, perpendicularY, slope, intercept}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getLineSegmentIntersection"></a>
+    <strong>getLineSegmentIntersection (...)</strong>
+    </dt>
+    <dd>
+    gets the intersection of a line and a line segment
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {x1, y1, x2, y2, x3, y3, x4, y4} or {x1, y1, x2, y2, slope, intercept}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "checkLinePoint"></a>
+    <strong>checkLinePoint (x, y, x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    checks if a point is on a line
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getCircleLineIntersection"></a>
+    <strong>getCircleLineIntersection (circleX, circleY, radius, x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    gets the intersection of a line and a circle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">circleX</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleY</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        { ratio, ... }
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getPolygonLineIntersection"></a>
+    <strong>getPolygonLineIntersection (x1, y1, x2, y2, ...)</strong>
+    </dt>
+    <dd>
+    checks whether or not a line intersects a polygon
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+</dl>
+
 
 </div> <!-- id="content" -->
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/lunarmodules/ldoc">LDoc 1.5.0</a></i>
-<i style="float:right;">Last updated 2023-05-22 06:29:12 </i>
+<i style="float:right;">Last updated 2023-05-22 06:37:52 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
