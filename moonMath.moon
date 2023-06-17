@@ -103,9 +103,7 @@ getGreatestPoint = (points, offset = 1) ->
   start = 2 - offset
   greatest = points[start]
   least = points[start]
-  print greatest, least
   for i = 2, #points / 2
-    print i, i * 2 - offset
     i = i * 2 - offset
     if points[i] > greatest then greatest = points[i]
     if points[i] < least then least = points[i]
@@ -271,6 +269,7 @@ getYIntercept = (x, y, ...) ->
 -- @tparam table ... {slope1, slope2, x1, y1, x2, y2} or {slope1, intercept1, slope2, intercept2} or {x1, y1, x2, y2, x3, y3, x4, y4} 
 -- @treturn table {x, y}
 getLineLineIntersection = (...) ->
+  -- DEBUG LAST
   inpt = checkInput ...
   local x, y, x1, y1, x2, y2, x3, y3, x4, y4
   local slope1, intercept1
@@ -316,7 +315,7 @@ getLineLineIntersection = (...) ->
     y = slope2 and slope2 * x + intercept2 or 1
   elseif slope2 == false
     x = x3
-    y = slope2 * x + intercept1
+    y = slope1 * x + intercept1
   elseif checkFuzzy(slope1, slope2)
     if checkFuzzy(intercept1, intercept2) then return true
     else return false
@@ -506,13 +505,372 @@ getPolygonLineIntersection = (x1, y1, x2, y2, ...) ->
   #final > 0 and final or false
   
 
+--- gets the perpendicular bisector of a line (https://www.youtube.com/watch?v=A86COO8KC58)
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn midx, midy, perpendicularSlope
+getPerpendicularBisector = (x1, y1, x2, y2) ->
+  slope = getSlope x1, y1, x2, y2
+  midx, midy = getMidPoint x1, y1, x2, y2
+  midx, midy, getPerpendicularSlope(slope)
+
+
+--- checks hether or not a point lies on a line segment
+-- @tparam number px
+-- @tparam number py
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn bool
+checkSegmentPoint = ( px, py, x1, y1, x2, y2 ) ->
+  x = checkLinePoint px, py, x1, y1, x2, y2
+  if x == false then return false
+
+  lenghtX = x2 - x1
+  lenghtY = y2 - y1
+
+  if checkFuzzy(lenghtX ,0)
+    if checkFuzzy(px ,x1)
+      local low, high
+      if y1 > y2
+        low = y2
+        high = y1
+      else
+        low = y1
+        high = y2
+      
+      if py >= low and py <= high then return true
+      else return false
+    else
+      return false
+  elseif checkFuzzy(lenghtY, 0)
+    if checkFuzzy(py, y1)
+      local low, high
+      if x1 > x2
+        low = x2
+        high = x1
+      else
+        low = x1
+        high = x2
+
+      if px >= low and px <= high then return true
+      else return false
+    else
+      return false
+
+
+  distToPx = px - x1
+  distToPy = py - y1
+  scaleX = distToPx / lenghtX
+  scaleY = distToPy / lenghtY
+
+  if ( scaleX >= 0 and scaleX <= 1 ) and ( scaleY >= 0 and scaleY <= 1 )
+    return true
+  return false
+
+--- adds point to a table
+-- @tparam table t
+-- @tparam number x
+-- @tparam number y
+addPoints = (t, x, y) ->
+  t[#t + 1] = x 
+  t[#t + 1] = y 
+
+--- gets the point of intersection between two line segments
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number x3
+-- @tparam number y3
+-- @tparam number x4
+-- @tparam number y4
+-- @treturn bool
+getSegmentSegmentIntersection = (x1, y1, x2, y2, x3, y3, x4, y4 ) ->
+  slope1, intercept1 = getSlope(x1, y1, x2, y2), unpack getYIntercept(x1, y1, x2, y2)
+  slope2, intercept2 = getSlope(x3, y3, x4, y4), unpack getYIntercept(x3, y3, x4, y4)
+
+  if ((slope1 and slope2) and checkFuzzy(slope1, slope2)) or (slope1 == false and slope2 == false)
+    
+    if checkFuzzy(intercept1, intercept2)
+      points = {}
+      if checkSegmentPoint(x1, y1, x3, y3, x4, y4) then addPoints( points, x1, y1 )
+      if checkSegmentPoint(x2, y2, x3, y3, x4, y4) then addPoints( points, x2, y2 )
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2) then addPoints( points, x3, y3 )
+      if checkSegmentPoint(x4, y4, x1, y1, x2, y2) then addPoints( points, x4, y4 )
+
+      points = removeDuplicatePointsFlat(points)
+      if #points == 0 then return false
+      return points
+    else
+      return false
+  
+  x, y = unpack getLineLineIntersection x1, y1, x2, y2, x3, y3, x4, y4
+      
+  if x and checkSegmentPoint(x, y, x1, y1, x2, y2) and checkSegmentPoint(x, y, x3, y3, x4, y4)
+    return {x, y}
+
+  false
+
+
+--- checks if a point is on a circle
+-- @tparam number x
+-- @tparam number y
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @treturn bool
+isPointOnCircle = (x, y, circleX, circleY, radius) ->
+  checkFuzzy getLength(circleX, circleY, x, y), radius
+
+--- checks if a point is within the radius of a circle
+-- @tparam number x
+-- @tparam number y
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @treturn bool
+checkCirclePoint = (x, y, circleX, circleY, radius) ->
+  getLength(circleX, circleY, x, y) <= radius
+
+--- gets the type of intersection of a line segment
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number radius
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn table {circularSeg, ...}
+getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
+  cIntersection = getCircleLineIntersection(circleX, circleY, radius, x1, y1, x2, y2)
+  local Type, x3, y3, x4, y4
+
+  if type(cIntersection) == 'table'
+    Type, x3, y3, x4, y4 = unpack cIntersection
+  elseif type(cIntersection) == 'boolean'
+    Type = cIntersection
+
+  if Type == false then return false
+
+  slope, intercept = getSlope(x1, y1, x2, y2), unpack getYIntercept(x1, y1, x2, y2)
+
+  if isPointOnCircle(x1, y1, circleX, circleY, radius) and 
+    isPointOnCircle(x2, y2, circleX, circleY, radius)
+    return {'chord', x1, y1, x2, y2}
+
+  if slope
+    if checkCirclePoint(x1, y1, circleX, circleY, radius) and
+      checkCirclePoint(x2, y2, circleX, circleY, radius)
+      return {'enclosed', x1, y1, x2, y2}
+    elseif x3 and x4      
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2) and
+        checkSegmentPoint(x4, y4, x1, y1, x2, y2) == false
+        return {'tangent', x3, y3}
+      elseif checkSegmentPoint(x4, y4, x1, y1, x2, y2) and
+        checkSegmentPoint(x3, y3, x1, y1, x2, y2) == false
+        return {'tangent', x4, y4}
+      else
+        if checkSegmentPoint(x3, y3, x1, y1, x2, y2) and
+          checkSegmentPoint(x4, y4, x1, y1, x2, y2)
+          return {'secant', x3, y3, x4, y4}
+        else
+          return false
+    elseif x4 == false
+      if checkSegmentPoint(x3, y3, x1, y1, x2, y2)
+        return {'tangent', x3, y3}
+      else
+        local length, distance1, distance2
+        length = getLength(x1, y1, x2, y2)
+        distance1 = getLength(x1, y1, x3, y3)
+        distance2 = getLength(x2, y2, x3, y3)
+
+        if length > distance1 or length > distance2 then return false
+        elseif length < distance1 and length < distance2 then return false
+        else return {'tangent', x3, y3}
+  else
+    math = math
+    lengthToPoint1 = circleX - x1
+    remainingDistance = lengthToPoint1 - radius
+    intercept = math.sqrt(-(lengthToPoint1 ^ 2 - radius ^ 2))
+
+    if -(lengthToPoint1 ^ 2 - radius ^ 2) < 0 then return false
+
+    topX, topY = x1, circleY - intercept
+    bottomX, bottomY = x1, circleY + intercept
+
+    length = getLength(x1, y1, x2, y2)
+    distance1 = getLength(x1, y1, topX, topY)
+    distance2 = getLength(x2, y2, topX, topY)
+
+    if bottomY ~= topY
+      if checkSegmentPoint(topX, topY, x1, y1, x2, y2) and
+        checkSegmentPoint(bottomX, bottomY, x1, y1, x2, y2)
+        return {'chord', topX, topY, bottomX, bottomY}
+      elseif checkSegmentPoint(topX, topY, x1, y1, x2, y2)
+        return {'tangent', topX, topY}
+      elseif checkSegmentPoint(bottomX, bottomY, x1, y1, x2, y2)
+        return {'tangent', bottomX, bottomY}
+      else return false
+    else
+      if checkSegmentPoint(topX, topY, x1, y1, x2, y2)
+        return {'tangent', topX, topY}
+      else
+        return false
+
+--- checks if the line segment intersects the polygon
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam number ...
+-- @treturn bool
+getPolygonSegmentIntersection = (x1, y1, x2, y2, ...) ->
+  input = checkInput ...
+  choices = {}
+
+
+  for i = 1, #input, 2
+    local _x1, _y1, _x2, _y2
+    ssIntersection = getSegmentSegmentIntersection(input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3), x1, y1, x2, y2)
+
+    if type(ssIntersection) == 'table'
+      _x1, _y1, _x2, _y2 = unpack ssIntersection  
+    elseif type(ssIntersection) == 'boolean'
+      _x1 = ssIntersection
+
+
+    if _x1 and _x2 == nil then choices[#choices + 1] = {_x1, _y1}
+    elseif _x2 then choices[#choices + 1] = {_x1, _y1, _x2, _y2}
+
+  
+  final = removeDuplicatePairs choices
+  #final > 0 and final or false
+
+
+--- checks if a line-segment is entirely within a circle
+-- @tparam number circleX
+-- @tparam number circleY
+-- @tparam number circleRadius
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @treturn bool
+isSegmentCompletelyInsideCircle = (circleX, circleY, circleRadius, x1, y1, x2, y2) ->
+  sIntersection = getCircleSegmentIntersection(circleX, circleY, circleRadius, x1, y1, x2, y2)
+  Type = unpack(sIntersection) if type(sIntersection) == 'table' else sIntersection
+  return Type == 'enclosed'
+
+
+  
+--- checks if the point lies inside the polygon not on the polygon
+-- @tparam number px
+-- @tparam number py
+-- @tparam number ...
+-- @treturn bool
+checkPolygonPoint = (px, py, ...) ->
+  points = {unpack(checkInput(...))}
+
+  greatest, least = getGreatestPoint(points, 0)
+  if isWithinBounds(least, py, greatest) == false then return false
+  greatest, least = getGreatestPoint points
+  if isWithinBounds(least, px, greatest) == false then return false
+
+  count = 0
+  for i = 1, #points, 2
+    if checkFuzzy(points[i + 1], py)
+      points[i + 1] = py + .001
+    if points[i + 3] and checkFuzzy(points[i + 3], py)
+      points[i + 3] = py + .001
+
+    x1, y1 = points[i], points[i + 1]
+    x2, y2 = points[i + 2] or points[1], points[i + 3] or points[2]
+
+    if getSegmentSegmentIntersection(px, py, greatest, py, x1, y1, x2, y2)
+      count = count + 1
+    
+  count and count % 2 ~= 0
+
+--- checks if a segment is completely inside a polygon
+-- @tparam number x1
+-- @tparam number y1
+-- @tparam number x2
+-- @tparam number y2
+-- @tparam table ...
+-- @treturn bool
+isSegmentCompletelyInsidePolygon = (x1, y1, x2, y2, ...) ->
+  polygon = checkInput ...
+  if checkPolygonPoint(x1, y1, polygon) == false or
+    checkPolygonPoint( x2, y2, polygon ) == false or
+    getPolygonSegmentIntersection(x1, y1, x2, y2, polygon)
+    return false
+
+  true
+
+--- gets the intersection of a line and a line segment
+-- @tparam table ... {x1, y1, x2, y2, x3, y3, x4, y4} or {x1, y1, x2, y2, slope, intercept}
+-- @treturn table {x, y}
+getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
+  inpt = checkInput ...
+
+
+  local slope1, intercept1, x, y, lineX1, lineY1, lineX2, lineY2
+  slope2 = getSlope(x1, y1, x2, y2)
+  intercept2 = unpack getYIntercept(x1, y1, x2, y2)
+
+  if #inpt == 2
+    slope1, intercept1 = inpt[1], inpt[2]
+    lineX1, lineY1 = 1, slope1 and slope1 + intercept1
+    lineX2, lineY2 = 2, slope1 and slope1 * 2 + intercept1
+  else
+    lineX1, lineY1, lineX2, lineY2 = unpack(inpt)
+    slope1 = getSlope(unpack(inpt))
+    intercept1 = unpack getYIntercept(unpack(inpt))
+
+  if slope1 == false and slope2 == false
+    if checkFuzzy(x1, lineX1)
+      return {x1, y1, x2, y2}
+    else
+      return false
+  elseif slope1 == false
+    x, y = inpt[1], (slope2 * inpt[1] + intercept2)
+  elseif slope2 == false
+    x, y = x1, (slope1 * x1 + intercept1)
+  else
+    r = getLineLineIntersection(slope1, intercept1, slope2, intercept2)
+    if type(r) == "boolean"
+      x = r
+    else
+      x, y = unpack r
+
+  local length1, length2, distance
+
+  if x == true
+    return {x1, y1, x2, y2}
+  elseif x
+    length1, length2 = getLength( x1, y1, x, y ), getLength( x2, y2, x, y )
+    distance = getLength x1, y1, x2, y2
+  else
+    if checkFuzzy intercept1, intercept2
+      return {x1, y1, x2, y2}
+    else
+      return false
+
+  if length1 <= distance and length2 <= distance then return {x, y} else return false
+
+  
 { 
   point: {
     rotate: rotatePoint
     scale: scalePoint
     polarToCartesian: polarToCartesian
     cartesianToPolar: cartesianToPolar
-  },
+  }
+
   line: {
     getLength: getLength
     getDistance: getLength
@@ -529,4 +887,17 @@ getPolygonLineIntersection = (x1, y1, x2, y2, ...) ->
     checkPoint: checkLinePoint
     getMidpoint: getMidPoint
   }
+
+  segment: {
+    checkPoint: checkSegmentPoint
+    getPerpendicularBisector: getPerpendicularBisector
+    getIntersection: getSegmentSegmentIntersection
+    getSegmentIntersection: getSegmentSegmentIntersection
+    getCircleIntersection: getCircleSegmentIntersection
+    getPolygonIntersection: getPolygonSegmentIntersection
+    isSegmentCompletelyInsideCircle: isSegmentCompletelyInsideCircle
+    isSegmentCompletelyInsidePolygon: isSegmentCompletelyInsidePolygon
+    getLineIntersection: getLineSegmentIntersection
+  }
+
 }
