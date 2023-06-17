@@ -145,6 +145,54 @@
 	<td class="name" nowrap><a href="#getPolygonLineIntersection">getPolygonLineIntersection (x1, y1, x2, y2, ...)</a></td>
 	<td class="summary">checks whether or not a line intersects a polygon</td>
 	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getPerpendicularBisector">getPerpendicularBisector (x1, y1, x2, y2)</a></td>
+	<td class="summary">gets the perpendicular bisector of a line (https://www.youtube.com/watch?v=A86COO8KC58)</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#checkSegmentPoint">checkSegmentPoint (px, py, x1, y1, x2, y2)</a></td>
+	<td class="summary">checks hether or not a point lies on a line segment</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#addPoints">addPoints (t, x, y)</a></td>
+	<td class="summary">adds point to a table</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getSegmentSegmentIntersection">getSegmentSegmentIntersection (x1, y1, x2, y2, x3, y3, x4, y4)</a></td>
+	<td class="summary">gets the point of intersection between two line segments</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isPointOnCircle">isPointOnCircle (x, y, circleX, circleY, radius)</a></td>
+	<td class="summary">checks if a point is on a circle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#checkCirclePoint">checkCirclePoint (x, y, circleX, circleY, radius)</a></td>
+	<td class="summary">checks if a point is within the radius of a circle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getCircleSegmentIntersection">getCircleSegmentIntersection (circleX, circleY, radius, x1, y1, x2, y2)</a></td>
+	<td class="summary">gets the type of intersection of a line segment</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getPolygonSegmentIntersection">getPolygonSegmentIntersection (x1, y1, x2, y2, ...)</a></td>
+	<td class="summary">checks if the line segment intersects the polygon</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isSegmentCompletelyInsideCircle">isSegmentCompletelyInsideCircle (circleX, circleY, circleRadius, x1, y1, x2, y2)</a></td>
+	<td class="summary">checks if a line-segment is entirely within a circle</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#checkPolygonPoint">checkPolygonPoint (px, py, ...)</a></td>
+	<td class="summary">checks if the point lies inside the polygon not on the polygon</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#isSegmentCompletelyInsidePolygon">isSegmentCompletelyInsidePolygon (x1, y1, x2, y2, ...)</a></td>
+	<td class="summary">checks if a segment is completely inside a polygon</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#getLineSegmentIntersection">getLineSegmentIntersection (...)</a></td>
+	<td class="summary">gets the intersection of a line and a line segment</td>
+	</tr>
 </table>
 
 <br/>
@@ -1100,6 +1148,644 @@
 
 
 </dd>
+    <dt>
+    <a name = "getPerpendicularBisector"></a>
+    <strong>getPerpendicularBisector (x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    gets the perpendicular bisector of a line (https://www.youtube.com/watch?v=A86COO8KC58)
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">midx,</span></span>
+        midy, perpendicularSlope
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "checkSegmentPoint"></a>
+    <strong>checkSegmentPoint (px, py, x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    checks hether or not a point lies on a line segment
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">px</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">py</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "addPoints"></a>
+    <strong>addPoints (t, x, y)</strong>
+    </dt>
+    <dd>
+    adds point to a table
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">t</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getSegmentSegmentIntersection"></a>
+    <strong>getSegmentSegmentIntersection (x1, y1, x2, y2, x3, y3, x4, y4)</strong>
+    </dt>
+    <dd>
+    gets the point of intersection between two line segments
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x3</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y3</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x4</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y4</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isPointOnCircle"></a>
+    <strong>isPointOnCircle (x, y, circleX, circleY, radius)</strong>
+    </dt>
+    <dd>
+    checks if a point is on a circle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleX</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleY</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "checkCirclePoint"></a>
+    <strong>checkCirclePoint (x, y, circleX, circleY, radius)</strong>
+    </dt>
+    <dd>
+    checks if a point is within the radius of a circle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleX</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleY</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getCircleSegmentIntersection"></a>
+    <strong>getCircleSegmentIntersection (circleX, circleY, radius, x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    gets the type of intersection of a line segment
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">circleX</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleY</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">radius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {circularSeg, ...}
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getPolygonSegmentIntersection"></a>
+    <strong>getPolygonSegmentIntersection (x1, y1, x2, y2, ...)</strong>
+    </dt>
+    <dd>
+    checks if the line segment intersects the polygon
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isSegmentCompletelyInsideCircle"></a>
+    <strong>isSegmentCompletelyInsideCircle (circleX, circleY, circleRadius, x1, y1, x2, y2)</strong>
+    </dt>
+    <dd>
+    checks if a line-segment is entirely within a circle
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">circleX</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleY</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">circleRadius</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "checkPolygonPoint"></a>
+    <strong>checkPolygonPoint (px, py, ...)</strong>
+    </dt>
+    <dd>
+    checks if the point lies inside the polygon not on the polygon
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">px</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">py</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "isSegmentCompletelyInsidePolygon"></a>
+    <strong>isSegmentCompletelyInsidePolygon (x1, y1, x2, y2, ...)</strong>
+    </dt>
+    <dd>
+    checks if a segment is completely inside a polygon
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">x1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y1</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">x2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">y2</span>
+            <span class="types"><span class="type">number</span></span>
+
+
+
+        </li>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+
+
+
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><span class="type">bool</span></span>
+
+
+
+    </ol>
+
+
+
+
+</dd>
+    <dt>
+    <a name = "getLineSegmentIntersection"></a>
+    <strong>getLineSegmentIntersection (...)</strong>
+    </dt>
+    <dd>
+    gets the intersection of a line and a line segment
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">...</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+         {x1, y1, x2, y2, x3, y3, x4, y4} or {x1, y1, x2, y2, slope, intercept}
+        </li>
+    </ul>
+
+    <h3>Returns:</h3>
+    <ol>
+
+           <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.5">table</a></span>
+        {x, y}
+    </ol>
+
+
+
+
+</dd>
 </dl>
 
 
@@ -1107,7 +1793,7 @@
 </div> <!-- id="main" -->
 <div id="about">
 <i>generated by <a href="http://github.com/lunarmodules/ldoc">LDoc 1.5.0</a></i>
-<i style="float:right;">Last updated 2023-05-22 06:37:52 </i>
+<i style="float:right;">Last updated 2023-06-17 16:37:22 </i>
 </div> <!-- id="about" -->
 </div> <!-- id="container" -->
 </body>
