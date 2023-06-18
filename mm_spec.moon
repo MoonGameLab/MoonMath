@@ -1,7 +1,7 @@
 m = assert require 'moon'
 dump = m.p
 
-mm = assert require "moonMath"
+mm = assert require "init"
 mmo = assert require "mlib"
 
 

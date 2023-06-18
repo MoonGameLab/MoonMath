@@ -900,4 +900,7 @@ getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
     getLineIntersection: getLineSegmentIntersection
   }
 
+
+  vec2D: -> assert require 'vec2D'
+
 }
