@@ -58,6 +58,15 @@ describe "vec2D.set", ->
     
     assert.tablesFuzzyEqual vec, {x: 10, y: 5}
 
+describe "vec2D.dist", ->
+
+  it " :: Gets the dist between two pos vectors.", ->
+    vec1 = vec2D.from {1, 2}
+    vec2 = vec2D.from {1, 3}
+
+    print vec2D.dist vec1, vec2
+
+
 
     
 
