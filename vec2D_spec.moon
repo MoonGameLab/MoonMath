@@ -47,6 +47,18 @@ describe "vec2D.from", ->
   it " :: Create a vec2D from a table.", ->
     vec = vec2D.from {2, 43}
     assert.tablesFuzzyEqual vec, {x: 2, y: 43}
+
+
+describe "vec2D.set", ->
+
+  it " :: Sets a vector.", ->
+    vec = vec2D.ZERO!
+    
+    vec2D.set vec, 10, 5
+    
+    assert.tablesFuzzyEqual vec, {x: 10, y: 5}
+
+
     
 
   
