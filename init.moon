@@ -902,5 +902,6 @@ getLineSegmentIntersection = (x1, y1, x2, y2, ...) ->
 
 
   vec2D: -> assert require 'vec2D'
+  vec2DArr: -> assert require 'vec2DArr'
 
 }
