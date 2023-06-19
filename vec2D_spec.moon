@@ -95,6 +95,22 @@ describe "vec2D.add", ->
     vec2D.addS vec, 10
     assert.tablesFuzzyEqual vec, {x: 112, y: 44}
 
+  
+describe "vec2D.crossProd", ->
+
+  it " :: Gets crossProd of twi vec2D.", ->
+    vec1 = vec2D.from {20, 50}
+    vec2 = vec2D.from {21, 66}
+
+    assert.equal 270, vec2D.crossProd vec1, vec2
+
+describe "vec2D.lenght", ->
+
+  it " :: Gets vec2D mag.", ->
+    vec = vec2D.from {3, 4}
+
+    assert.equal 5, vec2D.length vec
+    assert.equal 25, vec2D.sqlength vec
 
 describe "vec2D.dist", ->
 
@@ -102,10 +118,11 @@ describe "vec2D.dist", ->
     vec1 = vec2D.from {1, 2}
     vec2 = vec2D.from {1, 3}
 
-    print vec2D.dist vec1, vec2
+    assert.equal 1, vec2D.dist vec1, vec2
 
+describe "vec2D.normalize", ->
 
-
-    
-
-  
+  it " :: Normalizes a vectors.", ->
+    vec1 = vec2D.from {3, 2}
+    vec2D.normalize vec1
+    assert.tablesFuzzyEqual vec1, {x: 0.83205, y: 0.5547}

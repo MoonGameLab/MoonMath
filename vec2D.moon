@@ -196,7 +196,7 @@ with vec2D
   -- length
   -- @tparam vec2D v1
   .length = (v1) ->
-    math.sqrt v1.x*v1.x + v1.y*v1.y
+    math.sqrt (v1.x*v1.x) + (v1.y*v1.y)
 
   -- length^2
   -- @tparam vec2D v1
