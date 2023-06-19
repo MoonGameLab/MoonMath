@@ -48,6 +48,19 @@ describe "vec2D.from", ->
     vec = vec2D.from {2, 43}
     assert.tablesFuzzyEqual vec, {x: 2, y: 43}
 
+describe "vec2D.from", ->
+  it " :: Creates a vec2D from given vec2D/Table", ->
+    vec1 = vec2D.from {10, 20}
+    vec2 = vec2D.from {x: 11, y: 22}
+
+    assert.tablesFuzzyEqual vec1, {x: 10, y: 20}
+    assert.tablesFuzzyEqual vec2, {x: 11, y: 22}
+
+describe "vec2D.ZERO", ->
+  it " :: Creates a zero vec2D {x: 0, y: 0}", ->
+    vec = vec2D.ZERO!
+
+    assert.tablesFuzzyEqual vec, {x: 0, y: 0}
 
 describe "vec2D.set", ->
 
@@ -57,6 +70,31 @@ describe "vec2D.set", ->
     vec2D.set vec, 10, 5
     
     assert.tablesFuzzyEqual vec, {x: 10, y: 5}
+
+
+describe "vec2D.setFrom", ->
+
+  it " :: Sets a vec2D from another.", ->
+    vecO = vec2D.from {100, 30}
+    vec = vec2D.ZERO!
+    vec2D.setFrom vec, vecO
+    
+    assert.tablesFuzzyEqual vec, {x: 100, y: 30}
+
+
+describe "vec2D.add", ->
+
+  it " :: Adds a vec2D to another or scalar.", ->
+    vecO = vec2D.from {100, 30}
+    vec = vec2D.ZERO!
+    vec2D.setFrom vec, {x: 2, y: 4}
+    
+    vec2D.add vec, vecO
+    assert.tablesFuzzyEqual vec, {x: 102, y: 34}
+    
+    vec2D.addS vec, 10
+    assert.tablesFuzzyEqual vec, {x: 112, y: 44}
+
 
 describe "vec2D.dist", ->
 

@@ -46,10 +46,16 @@ with vec2D
   -- @tparam vec2D v
   -- @tparam vec2D/number v1
   .add = (v, v1) ->
-    v.x = v.x + (v1.x or v1)
-    v.y = v.y + (v1.y or v1)
+    v.x = v.x + v1.x
+    v.y = v.y + v1.y
 
-  
+  -- Adds a scalar to a vec2D
+  -- @tparam vec2D v
+  -- @tparam number s
+  .addS = (v, s) ->
+    v.x = v.x + s
+    v.y = v.y + s
+
   -- Adds two vectors and sets a vec2D
   -- @tparam vec2D v
   -- @tparam vec2D v1
@@ -72,8 +78,15 @@ with vec2D
   -- @tparam vec2D v1
   -- @tparam vec2D v2
   .sub = (v, v1) ->
-    v.x = v.x - (v1.x or v1)
-    v.y = v.y - (v1.y or v1)
+    v.x = v.x - v1.x
+    v.y = v.y - v1.y
+
+  -- Subs a scalar from a vec2D
+  -- @tparam vec2D v
+  -- @tparam number s
+  .subS = (v, s) ->
+    v.x = v.x - s
+    v.y = v.y - s
 
   -- Subs two vec2Ds and create a new vec2D from result
   -- @tparam vec2D v1
@@ -89,8 +102,15 @@ with vec2D
   -- @tparam vec2D v1
   -- @tparam vec2D v2
   .mul = (v1, v2) ->
-    v.x = v.x * (v1.x or v1)
-    v.y = v.y * (v1.y or v1)
+    v.x = v.x * v1.x
+    v.y = v.y * v1.y
+
+  -- multiplies a vec2D by a scalar
+  -- @tparam vec2D v
+  -- @tparam number v1
+  .mulS = (v, s) ->
+    v.x = v.x * s
+    v.y = v.y * s
 
   -- Multiplies two vec2Ds and create a new vec2D from result
   -- @tparam vec2D v1
@@ -106,15 +126,29 @@ with vec2D
   -- @tparam vec2D v1
   -- @tparam vec2D v2
   .div = (v1, v2) ->
-    v.x = v.x / (v1.x or v1)
-    v.y = v.y / (v1.y or v1)
+    v.x = v.x / v1.x
+    v.y = v.y / v1.y
+
+  -- divides vec2D by scalar
+  -- @tparam vec2D v
+  -- @tparam number s
+  .divS = (v, s) ->
+    v.x = v.x / s
+    v.y = v.y / s
 
   -- modulus of two vec2Ds/(vec2D%number)
   -- @tparam vec2D v1
   -- @tparam vec2D v2
   .mod = (v1, v2) ->
-    v.x = v.x % (v1.x or v1)
-    v.y = v.y % (v1.y or v1)
+    v.x = v.x % v1.x 
+    v.y = v.y % v1.y
+
+  -- modulus vec2D % scalar
+  -- @tparam vec2D v
+  -- @tparam number s
+  .modS = (v, s) ->
+    v.x = v.x * s
+    v.y = v.y * s
 
   -- power of two vec2Ds/(vec2D%number)
   -- @tparam vec2D v1
@@ -122,6 +156,13 @@ with vec2D
   .pow = (v1, v2) ->
     v.x = v.x ^ (v1.x or v1)
     v.y = v.y ^ (v1.y or v1)
+
+  -- power of vec2D
+  -- @tparam vec2D v
+  -- @tparam number s
+  .modS = (v, s) ->
+    v.x = v.x ^ s
+    v.y = v.y ^ s
 
   -- scales a vec2D
   -- @tparam vec2D v1
@@ -172,12 +213,38 @@ with vec2D
     }
 
 
+  .normalize = (v) ->
+    tmp = 1 / vec2D.length(v)
+    v.x = v.x * tmp
+    v.y = v.y * tmp
 
+  .makeNormalized = (v) ->
+    tmp = 1 / vec2D.length(v)
+    vec = {
+      x: v.x * tmp
+      y: v.y * tmp
+    }
+    setmetatable(vec, META)
 
+  .rotate = (v, angle) ->
+    tmpVx = v.x
+    v.x = v.x * math.cos(angle) - v.y * math.sin(angle)
+    v.y = tmpVx * math.sin(angle) + v.y * math.cos(angle)
 
+  .makeRotated = (v, angle) ->
+    tmpVx = v.x
+    vec = {
+      x: v.x * math.cos(angle) - v.y * math.sin(angle)
+      y: tmpVx * math.sin(angle) + v.y * math.cos(angle)
+    }
+    setmetatable(vec, META)
 
-
-
+  .makeFromAngle = (angle) ->
+    vec = {
+      x: math.cos angle
+      y: math.sin angle
+    }
+    setmetatable(vec, META)
 
 
 return vec2D
