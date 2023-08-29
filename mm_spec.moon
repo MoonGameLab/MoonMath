@@ -2,7 +2,6 @@ m = assert require 'moon'
 dump = m.p
 
 mm = assert require "init"
-mmo = assert require "mlib"
 
 
 checkFuzzy = (a, b) ->
@@ -463,3 +462,76 @@ describe "segment.isSegmentCompletelyInsidePolygon", ->
     assert.true mm.segment.isSegmentCompletelyInsideCircle( 3, 3, 2, 2, 2, 3, 4 )
     assert.false mm.segment.isSegmentCompletelyInsideCircle( 3, 3, 2, 1, 1, 3, 4 )
     assert.false mm.segment.isSegmentCompletelyInsideCircle(3, 3, 2, 1, 1, -1, -1 )
+
+
+describe "math.getRoot", ->
+  it " :: Returns the nth root to x, given n and x.", ->
+    math = mm.math
+    assert.multipleFUzzyEqual {math.getRoot(4, 2)}, {2}
+    assert.multipleFUzzyEqual {math.getRoot(16, 2)}, {4}
+    assert.multipleFUzzyEqual {math.getRoot(4, -2)}, {.5}
+
+
+describe "math.isPrime", ->
+  it " :: Returns true if a number is prime.", ->
+    math = mm.math
+    assert.true math.isPrime 3
+    assert.true math.isPrime 2
+    assert.true math.isPrime 47
+    assert.false math.isPrime 1
+    assert.false math.isPrime 100
+
+describe "math.round", ->
+  it " :: Returns tnumber rounded.", ->
+    math = mm.math
+    assert.equal math.round(3.4), 3
+    assert.equal math.round(6.7), 7
+    assert.equal math.round(197.88, 2), 197.88
+    assert.equal math.round(197.88, 1), 197.9
+    assert.equal math.round(197.88, -2), 200 
+
+describe "math.getSummation", ->
+  it " :: Adds up numbers and such.", ->
+    math = mm.math
+    assert.equal math.getSummation(1, 10, (i) -> return (i*2)), 110
+    assert.equal math.getSummation(1, 2, (i) -> return (i*2)), 6
+    assert.equal math.getSummation(1, 5, ( i, t ) ->
+      if t[i-1] 
+        return i + t[i-1] 
+      else 
+        return 1 ), 35
+
+describe "math.getPercentOfChange", ->
+  it " :: Gives the percentage of change.", ->
+    math = mm.math
+    assert.equal math.getPercentOfChange(2, 4), 1
+    assert.equal math.getPercentOfChange(4, 2), -.5
+    assert.equal math.getPercentOfChange(4, 0), -1
+    assert.equal math.getPercentOfChange(0, 0), 0
+    assert.equal math.getPercentOfChange(0, 3), 1/0
+
+
+describe "math.getPercentage", ->
+  it " :: Gives the percent.", ->
+    math = mm.math
+    assert.equal math.getPercentage(1, 2), 2
+    assert.equal math.getPercentage(2, 1), 2
+    assert.equal math.getPercentage(.5, 50), 25
+    assert.equal math.getPercentage(50, 2), 100
+    assert.equal math.getPercentage(-.5, 4), -2
+
+describe "math.getQuadraticRoots", ->
+  it " :: Gives roots given a, b, and c.", ->
+    math = mm.math
+    assert.multipleFUzzyEqual { math.getQuadraticRoots(1, -3, -4) }, {-1, 4}
+    assert.multipleFUzzyEqual { math.getQuadraticRoots(1, 0, -4) }, {-2, 2}
+    assert.multipleFUzzyEqual { math.getQuadraticRoots(6, 11, -35) }, {-3.5, 5/3}
+
+    assert.false math.getQuadraticRoots(1, 2, 4)
+    assert.false math.getQuadraticRoots(.6, .3, .9)
+
+describe "math.getAngle", ->
+  it " :: Gives roots given a, b, and c.", ->
+    math = mm.math
+    assert.fuzzyEqual math.getAngle(1, 3, 1, 1, 3, 1), 1.57079633
+    assert.fuzzyEqual math.getAngle(4, 4, 1, 1, 4, 1), 0.785398163
