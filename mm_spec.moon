@@ -535,3 +535,49 @@ describe "math.getAngle", ->
     math = mm.math
     assert.fuzzyEqual math.getAngle(1, 3, 1, 1, 3, 1), 1.57079633
     assert.fuzzyEqual math.getAngle(4, 4, 1, 1, 4, 1), 0.785398163
+
+
+describe "circle.getArea", ->
+  it " :: Gives the area of the circle.", ->
+    circle = mm.circle
+    assert.fuzzyEqual circle.getArea(1), 3.14159
+    assert.fuzzyEqual circle.getArea(2), 12.56637
+    assert.fuzzyEqual circle.getArea(5), 78.53981
+    assert.fuzzyEqual circle.getArea(10), 314.15926
+    assert.fuzzyEqual circle.getArea(20), 1256.63706
+
+
+describe "circle.getCircumference", ->
+  it " :: Gives the circumference of the circle.", ->
+    circle = mm.circle
+    assert.fuzzyEqual circle.getCircumference(1), 6.28318
+    assert.fuzzyEqual circle.getCircumference(2), 12.56637
+    assert.fuzzyEqual circle.getCircumference(5), 31.41592
+    assert.fuzzyEqual circle.getCircumference(10), 62.83185
+    assert.fuzzyEqual circle.getCircumference(20), 125.66370
+
+describe "circle.getCircleIntersection", ->
+  it " :: Returns \'Equal\' if the circles are the same.", ->
+    circle = mm.circle
+    assert.equal circle.getCircleIntersection( 0, 0, 4, 0, 0, 4 ), 'equal'
+
+  it " :: Returns \'collinear\' if circles have same x and y but not radii.", ->
+    circle = mm.circle
+    assert.equal circle.getCircleIntersection( 0, 0, 4, 0, 0, 8 ), 'collinear'
+    assert.equal circle.getCircleIntersection( 0, 0, 8, 0, 0, 4 ), 'collinear'
+
+  it " :: Returns \'inside\' if the circles are inside but not touching one another.", ->
+    circle = mm.circle
+    assert.equal circle.getCircleIntersection( 1, 1, 2, 2, 1, 4 ), 'inside'
+
+  it " :: Returns false if the point is not within the cirlce.", ->
+    circle = mm.circle
+    assert.false circle.getCircleIntersection( 4, 4, 1, 6, 6, 1 )
+
+
+describe "circle.isCircleCompletelyInside", ->
+  it " :: Returns if a circle is completely inside of another circle.", ->
+    circle = mm.circle
+    assert.true circle.isCircleCompletelyInside( 1, 1, 2, 2, 1, 4 )
+    assert.true circle.isCircleCompletelyInside( 1, 1, 3, 2, 1, 4 )
+    assert.false circle.isCircleCompletelyInside( 8, 2, .1, 2, 1, 4 )

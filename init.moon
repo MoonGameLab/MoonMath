@@ -908,6 +908,48 @@ getAngle = (x1, y1, x2, y2, x3, y3) ->
 
 getPercentage = (percent, n) ->
   percent * n
+
+getCircleArea = (radius) ->
+  math = math
+  math.pi * (radius * radius)
+
+getCircumference = (radius) ->
+  math = math
+  2 * math.pi * radius
+
+getCircleCircleIntersection = (circle1x, circle1y, radius1, circle2x, circle2y, radius2) ->
+  length = getLength(circle1x, circle1y, circle2x, circle2y)
+  if length > radius1 + radius2 then return false
+
+  if checkFuzzy(length, 0) and checkFuzzy(radius1, radius2) then return 'equal'
+  if checkFuzzy(circle1x, circle2x) and checkFuzzy(circle1y, circle2y) then return 'collinear'
+
+  a = (radius1 * radius1 - radius2 * radius2 + length * length) / (2 * length)
+  h = math.sqrt(radius1 * radius1 - a * a)
+
+  p2x = circle1x + a * (circle2x - circle1x) / length
+  p2y = circle1y + a * (circle2y - circle1y) / length
+  p3x = p2x + h * (circle2y - circle1y) / length
+  p3y = p2y - h * (circle2x - circle1x) / length
+  p4x = p2x - h * (circle2y - circle1y) / length
+  p4y = p2y + h * (circle2x - circle1x) / length
+
+  if validateNumber(p3x) == false or validateNumber(p3y) == false or 
+    validateNumber(p4x) == false or 
+    validateNumber( p4y ) == false
+    return 'inside'
+
+  if checkFuzzy(length, radius1 + radius2) or 
+    checkFuzzy(length, math.abs(radius1 - radius2))
+    return 'tangent', p3x, p3y
+
+  return 'intersection', p3x, p3y, p4x, p4y
+
+isCircleCompletelyInsideCircle = (circle1x, circle1y, circle1radius, circle2x, circle2y, circle2radius) ->
+  if checkCirclePoint(circle1x, circle1y, circle2x, circle2y, circle2radius) == false then return false
+  Type = getCircleCircleIntersection(circle2x, circle2y, circle2radius, circle1x, circle1y, circle1radius)
+  if (Type ~= 'tangent' and Type ~= 'collinear' and Type ~= 'inside') then return false
+  return true
   
 { 
   point: {
@@ -955,6 +997,23 @@ getPercentage = (percent, n) ->
     getQuadraticRoots: getQuadraticRoots
     getAngle: getAngle
     getPercentage: getPercentage
+  }
+
+  circle: {
+    getArea: getCircleArea
+    checkPoint: checkCirclePoint
+    isPointOnCircle: isPointOnCircle
+    getCircumference: getCircumference
+    getLineIntersection: getCircleLineIntersection
+    getSegmentIntersection: getCircleSegmentIntersection
+    getCircleIntersection: getCircleCircleIntersection
+    isCircleCompletelyInside: isCircleCompletelyInsideCircle
+    isPolygonCompletelyInside: isPolygonCompletelyInsideCircle
+    isSegmentCompletelyInside: isSegmentCompletelyInsideCircle
+
+    getPolygonIntersection: getPolygonCircleIntersection
+    isCircleInsidePolygon: isCircleInsidePolygon
+    isCircleCompletelyInsidePolygon: isCircleCompletelyInsidePolygon
   }
 
 
