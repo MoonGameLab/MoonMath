@@ -953,7 +953,7 @@ isCircleCompletelyInsideCircle = (circle1x, circle1y, circle1radius, circle2x, c
 
 -- POLY  
 getSignedPolygonArea = (...) ->
-  points = {unpack(checkInput(...))}
+  points = checkInput(...)
 
   points[#points + 1] = points[1]
   points[#points + 1] = points[2]
@@ -984,7 +984,7 @@ getTriangleHeight = (base, ...) ->
   (2 * area) / base, area
 
 getCentroid = (...) ->
-  points = {unpack(checkInput(...))}
+  points = checkInput(...)
 
   points[#points + 1] = points[1]
   points[#points + 1] = points[2]
@@ -993,13 +993,13 @@ getCentroid = (...) ->
 
   centroidX = (1 / (6 * area)) * ( getSummation(1, #points / 2,
     (index) ->
-      index *= 2 - 1
+      index = index * 2 - 1
       return ((points[index] + cycle(points, index + 2 )) * ((points[index] * cycle(points, index + 3)) - (cycle(points, index + 2) * points[index + 1])))
   ))
 
   centroidY = (1 / (6 * area)) * (getSummation(1, #points / 2,
     (index) ->
-      index *= 2 - 1
+      index = index * 2 - 1
       return ((points[index + 1] + cycle(points, index + 3)) * ((points[index] * cycle(points, index + 3)) - (cycle(points, index + 2) * points[index + 1])))
   ))
 

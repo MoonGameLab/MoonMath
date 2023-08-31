@@ -1,9 +1,8 @@
 m = assert require 'moon'
 dump = m.p
 
-mm = assert require "init"
-vec2D = mm.vec2D!
-vec2DArr = mm.vec2DArr!
+vec2D = assert require "vec2D"
+vec2DArr = assert require "vec2DArr"
 
 checkFuzzy = (a, b) ->
   (a - .00001 <= b and b <= a + .00001)

@@ -581,3 +581,60 @@ describe "circle.isCircleCompletelyInside", ->
     assert.true circle.isCircleCompletelyInside( 1, 1, 2, 2, 1, 4 )
     assert.true circle.isCircleCompletelyInside( 1, 1, 3, 2, 1, 4 )
     assert.false circle.isCircleCompletelyInside( 8, 2, .1, 2, 1, 4 )
+
+
+describe "polygon.getTriangleHeight", ->
+  it " :: Given points of triangle and length of base.", ->
+    polygon = mm.polygon
+    assert.multipleFUzzyEqual {polygon.getTriangleHeight( 3, 0, 0, 0, 4, 3, 0 )}, {4, 6}
+    assert.multipleFUzzyEqual {polygon.getTriangleHeight( 6, -2, 1, 2, 4, 4, 1 )}, {3, 9}
+    assert.multipleFUzzyEqual {polygon.getTriangleHeight( 3, 1, 1, 3, 4, 0, 4 )}, {3, 4.5}
+
+  it " :: Given the length of the base and the area.", ->
+    polygon = mm.polygon
+    assert.fuzzyEqual polygon.getTriangleHeight( 3, 6 ), 4 
+    assert.fuzzyEqual polygon.getTriangleHeight( 6, 9 ), 3
+
+describe "polygon.getSignedArea", ->
+  it " :: Gives the sigend area of the shape. Positive if clockwise.", ->
+    polygon = mm.polygon
+    assert.fuzzyEqual polygon.getSignedArea( 0, 0, 3, 0, 3, 4, 0, 4 ), 12
+    assert.fuzzyEqual polygon.getSignedArea( 0, 0, 3, 0, 0, 4 ), 6
+    assert.fuzzyEqual polygon.getSignedArea( 4, 4, 0, 4, 0, 0, 4, 0 ), 16
+
+  it " :: Negative if counter clock-wise.", ->
+    polygon = mm.polygon
+    assert.fuzzyEqual polygon.getSignedArea( 0, 0, 0, 4, 3, 4, 3, 0 ), -12
+    assert.fuzzyEqual polygon.getSignedArea( 0, 0, 0, 4, 3, 0 ), -6
+
+
+describe "polygon.getArea", ->
+  it " :: Gives the sigend area of the shape. Positive if clockwise.", ->
+    polygon = mm.polygon
+    assert.fuzzyEqual polygon.getArea( 0, 0, 3, 0, 3, 4, 0, 4 ), 12
+    assert.fuzzyEqual polygon.getArea( 0, 0, 3, 0, 0, 4 ), 6
+    assert.fuzzyEqual polygon.getArea( 4, 4, 0, 4, 0, 0, 4, 0 ), 16
+
+  it " :: Gives the area of the shape. Negative if counter clock-wise.", ->
+    polygon = mm.polygon
+    assert.fuzzyEqual polygon.getArea( 0, 0, 0, 4, 3, 4, 3, 0 ), 12
+    assert.fuzzyEqual polygon.getArea( 0, 0, 0, 4, 3, 0 ), 6
+
+describe "polygon.getCentroid", ->
+  it " :: Gives the x and y of the centroid.", ->
+    polygon = mm.polygon
+    assert.multipleFUzzyEqual {polygon.getCentroid( 0, 0, 0, 4, 4, 4, 4, 0 )}, { 2, 2 }
+    assert.multipleFUzzyEqual {polygon.getCentroid( 0, 0, 0, 6, 3, 0 ) }, { 1, 2 } 
+    assert.multipleFUzzyEqual {polygon.getCentroid( 2, -1, 2, 1, 1, 2, -1, 2, -2, 1, -2, -1, -1, -2, 1, -2 ) }, { 0, 0 }
+    assert.multipleFUzzyEqual {polygon.getCentroid( 2, 0, 3, 0, 4, 1, 3, 2, 2, 2, 1, 1 ) }, { 2.5, 1 }
+    assert.multipleFUzzyEqual {polygon.getCentroid( 3, 5, 2, 2, 4, 2 ) }, { 3, 3 }
+    
+describe "polygon.isSegmentInside", ->
+  it " :: Returns true if the segment is fully inside the polygon.", ->
+    polygon = mm.polygon
+    assert.true polygon.isSegmentInside( 4, 4, 4, 5, 4, 3, 2, 5, 3, 6, 5, 6, 6, 5 )
+    assert.false polygon.isSegmentInside( 6, 3, 7, 6, 4, 3, 2, 5, 3, 6, 5, 6, 6, 5 )
+
+  it " :: True if at least part of the segment is on/inside.", ->
+    polygon = mm.polygon
+    assert.true polygon.isSegmentInside( 6, 3, 4, 5, 4, 3, 2, 5, 3, 6, 5, 6, 6, 5 )
