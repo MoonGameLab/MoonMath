@@ -2,7 +2,6 @@ m = assert require 'moon'
 dump = m.p
 
 mm = assert require "init"
-mmOld = assert require "mlib"
 
 
 checkFuzzy = (a, b) ->

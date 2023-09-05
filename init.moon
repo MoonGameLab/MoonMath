@@ -4,8 +4,6 @@ type = type
 table = table
 unpack = table.unpack or unpack
 
-m = assert require 'moon'
-dump = m.p
 
 -- @local
 -- handles variable args funcs, assembles all ars in a table if not already
