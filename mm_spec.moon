@@ -2,6 +2,7 @@ m = assert require 'moon'
 dump = m.p
 
 mm = assert require "init"
+mmOld = assert require "mlib"
 
 
 checkFuzzy = (a, b) ->
@@ -638,3 +639,70 @@ describe "polygon.isSegmentInside", ->
   it " :: True if at least part of the segment is on/inside.", ->
     polygon = mm.polygon
     assert.true polygon.isSegmentInside( 6, 3, 4, 5, 4, 3, 2, 5, 3, 6, 5, 6, 6, 5 )
+
+describe "polygon.getPolygonIntersection", ->
+  it " :: Returns true if the polygons intersect.", ->
+    polygon = mm.polygon
+    tab = polygon.getPolygonIntersection( { 2, 6, 3, 8, 4, 6 }, { 3, 7, 2, 9, 4, 9 } )
+    assert.tablesFuzzyEqual tab, { { 2.75, 7.5 }, { 3.25, 7.5 } }
+    tab = polygon.getPolygonIntersection( { 3, 5, 4, 4, 3, 3, 2, 3, 1, 4, 1, 2, 3, 2, 5, 4, 3, 6, 1, 6 }, { 0, 6, 4, 5, 2, 4 } )
+    assert.tablesFuzzyEqual tab, { { 3.33333, 4.66666 }, { 4, 5 }, { 2, 5.5 } }
+    
+  it " :: Returns false if the polygons don\'t intersect.", ->
+    polygon = mm.polygon
+    assert.false polygon.getPolygonIntersection( { 2, 6, 3, 8, 4, 6 }, { 4, 7, 3, 9, 5, 9 } )
+    assert.false polygon.getPolygonIntersection( { 3, 5, 4, 4, 3, 3, 2, 3, 1, 4, 1, 2, 3, 2, 5, 4, 3, 6, 1, 6 }, { 0, 6, 3, 4, 2, 4 } )
+
+  it " :: Works with vertical lines.", ->
+    polygon = mm.polygon
+    tab = polygon.getPolygonIntersection( { 2, 3, 2, 6, 4, 6, 4, 4, 5, 5, 5, 3 }, { 3, 2, 3, 5, 6, 4, 6, 3, 4, 3, 4, 2 } )
+    assert.tablesFuzzyEqual tab, { { 4, 4.66666 }, { 4.5, 4.5 }, { 5, 4.33333 }, { 5, 3 }, { 3, 3 }, { 4, 3 } }
+
+
+describe "polygon.getCircleIntersection", ->
+  it " :: Returns true if the circle intersects", ->
+    polygon = mm.polygon
+    tab = polygon.getCircleIntersection( 3, 5, 2, 3, 1, 3, 6, 7, 4 )
+    assert.tablesFuzzyEqual tab, { { 'tangent', 3, 3 }, { 'tangent', 5, 5 } }
+
+    tab = polygon.getCircleIntersection( 5, 5, 1, 4, 4, 6, 4, 6, 6, 4, 6 )
+    assert.tablesFuzzyEqual tab, { { 'tangent', 5, 4 }, { 'tangent', 6, 5 }, { 'tangent', 5, 6 }, { 'tangent', 4, 5 } }
+
+    tab = polygon.getCircleIntersection( 3, 4, 2, 3, 3, 2, 4, 3, 5, 4, 4 )
+    assert.tablesFuzzyEqual tab, { { 'enclosed', 3, 3, 2, 4 }, { 'enclosed', 2, 4, 3, 5 }, { 'enclosed', 3, 5, 4, 4 }, { 'enclosed', 4, 4, 3, 3 } }
+
+  it " :: Returns false if the circle doesn\'t intersect.", ->
+    polygon = mm.polygon
+    assert.false polygon.getCircleIntersection( 9, 9, 2, 3, 1, 3, 6, 7, 4 )
+    assert.false polygon.getCircleIntersection( 10, 5, 1, 4, 4, 6, 4, 6, 6, 4, 6 )
+
+
+describe "polygon.isPolygonInside", ->
+  it " :: Returns true if polygon2 is inside", ->
+    polygon = mm.polygon
+
+    assert.false polygon.isPolygonInside( { 0, 0, 0, 4, 4, 4, 4, 0 }, { 5, 5, 5, 7, 7, 7, 7, 5 } )
+    assert.true polygon.isPolygonInside( { 0, 0, 0, 4, 4, 4, 4, 0 }, { 2, 2, 2, 3, 3, 3, 3, 2 } )
+
+describe "polygon.isPolygonCompletelyInside", ->
+  it " :: Returns if a polygon is completely inside of a polygon", ->
+    polygon = mm.polygon
+    assert.true polygon.isPolygonCompletelyInside( { -.5, 0, 0, .5, .5, 0, 0, -.5 }, { -.5, -.5, -1, -.5, -1, .5, -.5, .5, -.5, 1, .5, 1, .5, .5, 1, .5, 1, -.5, .5, -.5, .5, -1 } )
+    assert.false polygon.isPolygonCompletelyInside( { -.5, 0, 0, 1, .5, 0, 0, -.5 }, { -.5, -.5, -1, -.5, -1, .5, -.5, .5, -.5, 1, .5, 1, .5, .5, 1, .5, 1, -.5, .5, -.5, .5, -1 } )
+    assert.false polygon.isPolygonCompletelyInside( { 0, .5, .5, 1, 1, .5, .5, 0 }, { -.5, -.5, -1, -.5, -1, .5, -.5, .5, -.5, 1, .5, 1, .5, .5, 1, .5, 1, -.5, .5, -.5, .5, -1 } )
+
+describe "polygon.isCircleCompletelyOver", ->
+  it " :: Returns if a polygon is completely within a circle", ->
+    polygon = mm.polygon
+    assert.true polygon.isCircleCompletelyOver( 4, 2, 2.69, 4, 1, 2, 3, 3, 3, 6, 1, 4, 0 )
+    assert.false polygon.isCircleCompletelyOver( 4, 2, 1, 4, 1, 2, 3, 3, 3, 6, 1, 4, 0 )
+    assert.false polygon.isCircleCompletelyOver( 9, 2, 2.69, 4, 1, 2, 3, 3, 3, 6, 1, 4, 0 )
+
+describe "polygon.isCircleCompletelyInside", ->
+  it " :: Returns if a circle is completely inside of a polygon", ->
+    polygon = mm.polygon
+    assert.true polygon.isCircleCompletelyInside( 0, 0, .2, -.5, 0, 0, .5, .5, 0, 0, -.5 )
+    assert.false polygon.isCircleCompletelyInside( .2, .2, .2, -.5, 0, 0, .5, .5, 0, 0, -.5 ) 
+    assert.false polygon.isCircleCompletelyInside( 0, 0, .4, -.5, 0, 0, .5, .5, 0, 0, -.5 )
+    assert.false polygon.isCircleCompletelyInside( 0, 0, .5, -.5, 0, 0, .5, .5, 0, 0, -.5 )
+    assert.false polygon.isCircleCompletelyInside( 0, 0, 1, -.5, 0, 0, .5, .5, 0, 0, -.5 )

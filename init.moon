@@ -4,6 +4,8 @@ type = type
 table = table
 unpack = table.unpack or unpack
 
+m = assert require 'moon'
+dump = m.p
 
 -- @local
 -- handles variable args funcs, assembles all ars in a table if not already
@@ -55,6 +57,24 @@ removeDuplicateTriplets = (t) ->
              checkFuzzy(first[3], second[3])
             table.remove t, i
   t
+
+removeDuplicates4Points = (t) ->
+  for i = #t, 1, -1
+    first = t[i]
+    for j = #t, 1, -1
+      second = t[j]
+      if i ~= j
+        if type(first[1]) ~= type(second[1]) then return false
+        if type(first[2]) == 'number' and type(second[2]) == 'number' and type( first[3] ) == 'number' and type( second[3] ) == 'number'
+          if checkFuzzy(first[2], second[2]) and
+            checkFuzzy(first[3], second[3])
+            table.remove t, i
+        elseif checkFuzzy(first[1], second[1]) and
+          checkFuzzy(first[2], second[2]) and
+          checkFuzzy(first[3], second[3])
+          table.remove t, i
+  t
+
 
 --- Adds a point to a table.
 -- @tparam table t
@@ -666,7 +686,7 @@ getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
     if checkCirclePoint(x1, y1, circleX, circleY, radius) and
       checkCirclePoint(x2, y2, circleX, circleY, radius)
       return {'enclosed', x1, y1, x2, y2}
-    elseif x3 and x4      
+    elseif x3 and x4 
       if checkSegmentPoint(x3, y3, x1, y1, x2, y2) and
         checkSegmentPoint(x4, y4, x1, y1, x2, y2) == false
         return {'tangent', x3, y3}
@@ -679,7 +699,7 @@ getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
           return {'secant', x3, y3, x4, y4}
         else
           return false
-    elseif x4 == false
+    elseif x4 == nil
       if checkSegmentPoint(x3, y3, x1, y1, x2, y2)
         return {'tangent', x3, y3}
       else
@@ -704,7 +724,6 @@ getCircleSegmentIntersection = (circleX, circleY, radius, x1, y1, x2, y2) ->
 
     length = getLength(x1, y1, x2, y2)
     distance1 = getLength(x1, y1, topX, topY)
-    distance2 = getLength(x2, y2, topX, topY)
 
     if bottomY ~= topY
       if checkSegmentPoint(topX, topY, x1, y1, x2, y2) and
@@ -1043,8 +1062,12 @@ getPolygonCircleIntersection = (x, y, radius, ...) ->
   choices = {}
 
   for i = 1, #input, 2
-    Type, x1, y1, x2, y2 = getCircleSegmentIntersection(x, y, radius, input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3))
-    
+    local Type, x1, y1, x2, y2
+    cInter = getCircleSegmentIntersection(x, y, radius, input[i], input[i + 1], cycle(input, i + 2), cycle(input, i + 3))
+    if type(cInter) == 'table'
+      Type, x1, y1, x2, y2 = unpack(cInter)
+    else
+      Type = cInter
     if x2
       choices[#choices + 1] = {Type, x1, y1, x2, y2}
     elseif x1 then choices[#choices + 1] = {Type, x1, y1}
@@ -1184,5 +1207,7 @@ isCircleCompletelyInsidePolygon = (circleX, circleY, circleRadius, ...) ->
     isCircleCompletelyOver: isPolygonCompletelyInsideCircle
 
     getPolygonArea: getPolygonArea
+
+    getCircleSegmentIntersection: getCircleSegmentIntersection
   }
 }
